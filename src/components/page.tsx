@@ -26,6 +26,9 @@ export default function Page() {
         return <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />
     }
 
+    if (currentPage == "youtube"){
+        return <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />
+    }
 
     return <Home />
 }
@@ -55,26 +58,13 @@ const apps = [
         name: "whatsapp",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733585.png"
     },
-    {
-        name: "facebook",
-        urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-        name: "instagram",
-        urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733558.png"
-    },
-    {
-        name: "twitter",
-        urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733579.png"
-    },
+
+
     {
         name: "chrome",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732200.png"
     },
-    {
-        name: "tiktok",
-        urlIcon: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png"
-    },
+
     {
         name: "netflix",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/870/870910.png"
@@ -88,9 +78,10 @@ const apps = [
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732217.png"
     },
     {
-        name: "linkedin",
-        urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733561.png"
+        name :"youtube",
+        urlIcon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
     }
+
 
 
 ]
