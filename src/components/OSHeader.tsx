@@ -1,14 +1,15 @@
+import Power from './Power'
 import Time from './Time'
 
-function OSHeader() {
+export default function OSHeader() {
 
     return (
         <header>
             {/* Time format comes from settings, not statically typed */}
             <Time format='12h'/>
-            <h1>OS Header</h1>
+            <p>VenecOS</p>
+            <Power />
         </header>
     )
 }
 
-export default OSHeader
