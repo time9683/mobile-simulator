@@ -5,12 +5,15 @@ import Time from './Time'
 export default function OSHeader() {
 
     return (
-        <header>
+        <header className='bg-slate-50 w-screen flex justify-between px-2 top-0 fixed'>
             {/* Time format comes from settings, not statically typed */}
-            <Time format='12h'/>
-            <p>VenecOS</p>
-            <Network />
-            <Power />
+            <Time />
+            <p className='font-medium'>VenecOS</p>
+            <div className='min-w-12 justify-between flex'>
+                <Network />
+                <Power />
+            </div>
+            
         </header>
     )
 }

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
 
-interface TimeProps {
-    format: '12h' | '24h';
-}
-
-export default function Time({ format }: TimeProps) {
+export default function Time() {
     const [time, setTime] = useState(new Date())
+    const [format, setFormat] = useState('24h')
 
     let hours = format === '12h' && time.getHours() > 12 ? time.getHours() - 12 : time.getHours()
     let minutes = time.getMinutes().toString().padStart(2, '0')
-    let appendix = format === '12h' && time.getHours() >= 12 ? 'PM' : 'AM'
+    let appendix = ''
+
+    if (format === '12h') {
+        appendix = time.getHours() >= 12 ? 'PM' : 'AM'
+    }
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -19,8 +20,11 @@ export default function Time({ format }: TimeProps) {
     }, [])
 
     return (
-        <p>
-            {hours}:{minutes} {appendix}
-        </p>
+        <button onClick={() => {setFormat(format === '24h' ? '12h' : '24h')}}>
+            <p className='font-medium'>
+                {hours}:{minutes} {appendix}
+            </p>
+        </button>
+        
     )
 }

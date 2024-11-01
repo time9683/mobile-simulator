@@ -63,7 +63,7 @@ export default function Network() {
 
     return (
         <>
-            <button className='bg-white' onClick={() => {
+            <button onClick={() => {
                 ref.current?.showModal();
             }}>
                 <img src={icon} width='20' alt='Network'/>
