@@ -1,6 +1,7 @@
 import useMovilStore from "@stores/movil.ts"
 import { useEffect, useRef, useState } from "react"
 import { getRowAndColumn } from "@/utils"
+import Galery from "./Galery"
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
@@ -30,6 +31,10 @@ export default function Page() {
         return <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />
     }
 
+    if (currentPage == "galeria"){
+        return <Galery/>
+    }
+
     return <Home />
 }
 
@@ -50,21 +55,20 @@ function Home() {
 interface App {
     name: string
     urlIcon: string
+    column?: number 
+    row?: number 
     // component: React.FC
 }
 // whatsapp, facebook, instagram, twitter, youtube, tiktok, netflix, spotify, amazon, linkedin
-const apps = [
+const APPs: App[] = [
     {
         name: "whatsapp",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733585.png"
     },
-
-
     {
         name: "chrome",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732200.png"
     },
-
     {
         name: "netflix",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/870/870910.png"
@@ -78,22 +82,47 @@ const apps = [
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732217.png"
     },
     {
-        name :"youtube",
+        name: "youtube",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+    },
+    {
+        "name":"galeria",
+        "urlIcon":"https://static.vecteezy.com/system/resources/previews/042/712/634/non_2x/google-gallery-icon-logo-symbol-free-png.png"
+    }
+]
+
+
+
+
+function Block() {
+    // localstorage for block position
+    // const [apps, setApps] = useState<App[]>((localStorage.getItem("apps") && JSON.parse(localStorage.getItem("apps") as string)) || APPs)
+    const [apps, setApps] = useState<App[]>(APPs)
+
+    const [ElementDrag, setElementDrag] = useState<HTMLElement | null>(null)
+    // drag enter for manage the drop
+    // const [ElementDrop, setElementDrop] = useState<HTMLElement | null>(null)
+    function setAppsPosition(appName: string, row: number, column: number) {
+        setApps((apps) => {
+            const newApps = apps.map((app) => {
+                if (app.name === appName) {
+                    return { ...app, row, column }
+                }
+                return app
+            })
+            localStorage.setItem("apps", JSON.stringify(newApps))
+            return newApps
+        }
+        )
     }
 
 
 
-]
-
-function Block() {
-    const [ElementDrag, setElementDrag] = useState<HTMLElement | null>(null)
-    // drag enter for manage the drop
-    // const [ElementDrop, setElementDrop] = useState<HTMLElement | null>(null)
 
     function handleDragStart(event: React.DragEvent<HTMLDivElement>) {
         setElementDrag(event.currentTarget)
     }
+
 
     useEffect(() => {
         if (ElementDrag) {
@@ -109,10 +138,8 @@ function Block() {
                 const [row, column] = getRowAndColumn(x, y, 98);
                 console.log(row, column)
                 ElementDrag.style.display = "flex";
-                ElementDrag.style.gridColumnStart = `${column}`;
-                ElementDrag.style.gridRowStart = `${row}`
+                setAppsPosition(ElementDrag.textContent as string, row, column);
                 setElementDrag(null);
-
             })
 
 
@@ -123,7 +150,9 @@ function Block() {
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2">
         {
             apps.map((app, index) => {
-                return <IconApp key={app.name} {...app} onDragStart={handleDragStart} index={index} />
+                return <IconApp 
+                setAppsPosition={setAppsPosition}
+                key={app.name} {...app} onDragStart={handleDragStart} index={index} />
             })
            
         }
@@ -131,35 +160,38 @@ function Block() {
 }
 
 
+
 interface IconAppProps extends App {
     onDragStart: (event: React.DragEvent<HTMLDivElement>) => void
+    setAppsPosition: (appName: string, row: number, column: number) => void
     index?: number
 }
 
 
 function IconApp(props: IconAppProps) {
     const setPage = useMovilStore((state) => state.changePage)
+    const { row, column } = props;
     const ref = useRef<HTMLDivElement>(null)
 
-    const [column, setColumn] = useState<number|null>(null);
-    const [row, setRow] = useState<number|null>(null);
 
-    // calculate the column and row start base in the position of the element
     useEffect(() => {
+        console.log(column,row)
+        // if column and row are  not null or undefined, then set the position of the app
+        if (column !== undefined || row !== undefined) return;
         const timeoutId = setTimeout(() => {
             if (ref.current) {
+                console.log("xd")
                 const { x, y } = ref.current.getBoundingClientRect();
                 const [newRow, newColumn] = getRowAndColumn(x, y, 98);
-                setRow(newRow);
-                setColumn(newColumn);
+                props.setAppsPosition(props.name, newRow, newColumn);
             }
-        }, 100);
+        }, 2000);
 
         return () => clearTimeout(timeoutId);
-    }, [ref]);
+    }, [ref,column,row,props]);
 
 
-    const style = column !== null && row !== null ? { gridColumnStart: `${column}`, gridRowStart: `${row}` } : {};
+    const style = column !== undefined && row !== undefined ? { gridColumnStart: `${column}`, gridRowStart: `${row}` } : {};
 
     return <div
     ref={ref}
