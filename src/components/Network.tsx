@@ -5,7 +5,7 @@ import noNetworkIcon from '../assets/noNetwork.webp';
 import wifiIcon from '../assets/wifi.webp';
 
 // Appending the navigator.connection interface (Thanks TS!)
-interface Navigator extends NavigatorNetworkInformation {}
+type Navigator = NavigatorNetworkInformation
 
 interface NavigatorNetworkInformation {
   readonly connection?: NetworkInformation
