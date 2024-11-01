@@ -9,17 +9,18 @@ function Time({ format }: TimeProps) {
     
     let hours = format === '12h' && time.getHours() > 12 ? time.getHours() - 12 : time.getHours()
     let minutes = time.getMinutes().toString().padStart(2, '0')
+    let appendix = format === '12h' && time.getHours() >= 12 ? 'PM' : 'AM'
 
     useEffect(()=>{
         const interval = setInterval(() => {
             setTime(new Date())
-        }, 60000)
-        return clearInterval(interval)
-    })
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [])
 
     return (
         <p>
-            {hours}:{minutes}
+            {hours}:{minutes} {appendix}
         </p>
     )
 }
