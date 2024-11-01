@@ -2,6 +2,7 @@ import useMovilStore from "@stores/movil.ts"
 import { useEffect, useRef, useState } from "react"
 import { getRowAndColumn } from "@/utils"
 import Galery from "./Galery"
+import ProcessList from "./ProcessList"
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
@@ -35,8 +36,22 @@ export default function Page() {
         return <Galery/>
     }
 
+    if (currentPage == "procesos"){
+        // make a fake process list that show the currents process running and the ram and cpu usage
+
+            
+
+            return <ProcessList />
+    }
+
+
+
     return <Home />
 }
+
+
+
+
 
 
 
@@ -88,6 +103,10 @@ const APPs: App[] = [
     {
         "name":"galeria",
         "urlIcon":"https://static.vecteezy.com/system/resources/previews/042/712/634/non_2x/google-gallery-icon-logo-symbol-free-png.png"
+    },
+    {
+        name:"procesos",
+        urlIcon:"https://cdn-icons-png.flaticon.com/512/10239/10239999.png"
     }
 ]
 
