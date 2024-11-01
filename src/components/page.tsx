@@ -15,8 +15,17 @@ export default function Page() {
     }
 
     if (currentPage == "netflix"){
-        return <iframe src="https://stardeos.com/en" className="w-full h-full" />
+        return <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />
     }
+
+    if (currentPage == "spotify"){
+        return <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />
+    }
+
+    if (currentPage == "amazon"){
+        return <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />
+    }
+
 
     return <Home />
 }
