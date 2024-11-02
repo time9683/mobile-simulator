@@ -1,8 +1,9 @@
 import useMovilStore from "@stores/movil.ts"
 import { useEffect, useRef, useState } from "react"
 import { getRowAndColumn } from "@/utils"
-import Galery from "./Galery"
-import ProcessList from "./ProcessList"
+import Galery from "@components/Galery"
+import ProcessList from "@components/ProcessList"
+import Camara from "@components/camara"
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
@@ -37,11 +38,11 @@ export default function Page() {
     }
 
     if (currentPage == "procesos"){
-        // make a fake process list that show the currents process running and the ram and cpu usage
-
-            
-
             return <ProcessList />
+    }
+
+    if (currentPage == "camara"){
+        return <Camara/>
     }
 
 
@@ -107,6 +108,11 @@ const APPs: App[] = [
     {
         name:"procesos",
         urlIcon:"https://cdn-icons-png.flaticon.com/512/10239/10239999.png"
+    },
+    {
+        name: "camara",
+        urlIcon: "https://cdn-icons-png.flaticon.com/512/1373/1373061.png"
+        
     }
 ]
 
