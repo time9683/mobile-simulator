@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Clock, Cpu, HardDrive } from "lucide-react"
 import useMovilStore from "@stores/movil"
+import { formatUptime } from "@/utils"
 
 interface Process {
   pid: number
@@ -13,6 +14,8 @@ interface Process {
   time: string
   command: string
 }
+
+
 
 export default function ProcessList() {
   const [processes, setProcesses] = useState<Process[]>([
@@ -54,6 +57,12 @@ export default function ProcessList() {
     return () => clearInterval(interval)
   }, [])
 
+
+
+
+
+
+
   return (
     <div className="w-full  bg-gray-800 text-gray-200 shadow-lg overflow-hidden h-screen">
       <div className="p-6 space-y-6">
@@ -93,7 +102,7 @@ export default function ProcessList() {
         <div className="flex flex-wrap gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            <span>Uptime: {systemInfo.uptime}</span>
+            <span>Uptime: {formatUptime(systemInfo.uptime)}</span>
           </div>
           <div>
             Load Average: {systemInfo.loadAverage.map((load)=> load.toFixed(2)).join(" ")}
