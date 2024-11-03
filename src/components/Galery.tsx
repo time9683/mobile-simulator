@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Trash,CircleCheckBig } from "lucide-react"
 import { useLongPress } from "use-long-press"
+import { getImages } from "@/services/indexdb"
 const IMAGES = [
   "https://placehold.co/300x300?text=1",
   "https://placehold.co/300x300?text=2",
@@ -33,6 +34,24 @@ export default function Galery() {
         }
       }
     })
+
+    useEffect(()=>{
+      async function updateImages(){
+        const images = getImages()
+        if (images){
+          const data = await images
+          console.log(data.length)
+          setImages((prev)=>{
+            const newImages = data.filter((image)=>!prev.includes(image))
+            return [...prev,...newImages]
+          })
+        }
+      }
+
+      updateImages()
+
+    },[])
+
 
 
     if (currentImage !== null) {
