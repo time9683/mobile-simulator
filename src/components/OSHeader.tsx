@@ -5,7 +5,7 @@ import Time from './Time'
 export default function OSHeader() {
 
     return (
-        <header className='bg-slate-50 w-screen flex justify-between px-2 top-0 fixed'>
+        <header className='bg-slate-50 w-screen flex justify-between px-2'>
             {/* Time format comes from settings, not statically typed */}
             <Time />
             <p className='font-medium pointer-events-none'>VenecOS</p>

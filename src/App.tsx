@@ -1,20 +1,26 @@
+import useMovilStore from '@stores/movil'
 import OSHeader from './components/OSHeader'
-import { useState, createContext } from 'react'
+import Page from '@components/page'
+import { useEffect } from 'react'
+function App() {
+  const setInitTime =  useMovilStore((state) => state.setInitTime)
 
-export interface SettingsContext {
-  power: boolean,
-  setPower: (power: boolean) => void
-}
+  useEffect(() => {
+    // verifica si ya se ha guardado el tiempo de inicio
+    if (!localStorage.getItem('initTime')) {
+      setInitTime(Date.now())
+      localStorage.setItem('initTime', Date.now().toString())
+    } else {
+      setInitTime(Number(localStorage.getItem('initTime')))
+    }
+  })
 
-export const settingsContext = createContext<SettingsContext>({} as SettingsContext)
-
-export default function App() {
-  const [power, setPower] = useState(true)
 
   return (
-    <settingsContext.Provider value={{power, setPower}}>
+    <div className="h-screen w-screen flex flex-col overflow-hidden">
       <OSHeader />
-      <p> filler</p>
-    </settingsContext.Provider >
+      {/* <p> filler</p> */}
+      <Page />
+    </div>
   )
 }
