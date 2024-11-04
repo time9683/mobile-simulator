@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react';
+import { useRef } from 'react';
 import useMovilStore from '@stores/movil';
 import powerIcon from '../assets/power.webp';
 import whitePowerIcon from '../assets/whitePower.svg';
