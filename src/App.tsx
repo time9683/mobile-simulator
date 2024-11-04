@@ -9,7 +9,7 @@ export interface SettingsContext {
   power: boolean,
   setPower: (power: boolean) => void
 }
-
+//en vez de utilizar el contexto,deberias utilizar la store de zustand
 export const settingsContext = createContext<SettingsContext>({} as SettingsContext)
 
 export default function App() {
