@@ -1,6 +1,7 @@
 import { useEffect, useState, createContext } from 'react'
 import useMovilStore from '@stores/movil'
 import OSHeader from '@components/OSHeader'
+import OSFooter from '@components/OSFooter'
 import Page from '@components/page'
 import Power from '@components/Power'
 
@@ -42,6 +43,7 @@ export default function App() {
         <OSHeader />
         {/* <p> filler</p> */}
         <Page />
+        <OSFooter />
       </div>
     </settingsContext.Provider >
   )
