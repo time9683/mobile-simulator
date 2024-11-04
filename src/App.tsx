@@ -30,7 +30,7 @@ export default function App() {
   }
 
   return (
-      <div className="h-screen w-screen flex flex-col overflow-hidden">
+      <div className="h-dvh w-screen flex flex-col overflow-hidden">
         <OSHeader />
         {/* <p> filler</p> */}
         <Page />

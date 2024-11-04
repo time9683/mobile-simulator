@@ -147,7 +147,7 @@ function Block() {
                 
                 const { clientX: x, clientY: y } = event as DragEvent;
                 const [row, column] = getRowAndColumn(x, y, 98);
-                console.log(row, column)
+                // console.log(row, column)
                 ElementDrag.style.display = "flex";
                 setAppsPosition(ElementDrag.textContent as string, row, column);
                 setElementDrag(null);
@@ -185,17 +185,17 @@ function IconApp(props: IconAppProps) {
 
 
     useEffect(() => {
-        console.log(column,row)
+        // console.log(column,row)
         // if column and row are  not null or undefined, then set the position of the app
         if (column !== undefined || row !== undefined) return;
         const timeoutId = setTimeout(() => {
             if (ref.current) {
-                console.log("xd")
+                // console.log("xd")
                 const { x, y } = ref.current.getBoundingClientRect();
                 const [newRow, newColumn] = getRowAndColumn(x, y, 98);
                 props.setAppsPosition(props.name, newRow, newColumn);
             }
-        }, 2000);
+        }, 100);
 
         return () => clearTimeout(timeoutId);
     }, [ref,column,row,props]);
