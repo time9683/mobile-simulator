@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import Dialog from './Dialog';
 import cellularIcon from '../assets/cellular.webp';
 import noNetworkIcon from '../assets/noNetwork.webp';
