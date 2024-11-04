@@ -3,11 +3,10 @@ import Dialog from './Dialog';
 import cellularIcon from '../assets/cellular.webp';
 import noNetworkIcon from '../assets/noNetwork.webp';
 import wifiIcon from '../assets/wifi.webp';
+import useMovilStore from '@stores/movil';
 
 // Appending the navigator.connection interface (Thanks TS!)
-type Navigator = NavigatorNetworkInformation
-
-interface NavigatorNetworkInformation {
+interface NavigatorNetworkInformation extends Navigator{
   readonly connection?: NetworkInformation
 }
 
@@ -24,12 +23,9 @@ interface NetworkInformation extends EventTarget {
 }
 
 type NetworkType = 'wifi' | 'cellular';
-type NetworkStatus = 'connected' | 'disconnected';
 
-// TODO:
-// 1. Add network status to the app context
 export default function Network() {
-    const [networkStatus, setNetworkStatus] = useState<NetworkStatus>('disconnected');
+    const { networkStatus, setNetworkStatus } = useMovilStore()
 
     const ref = useRef<HTMLDialogElement>(null);
 
@@ -44,7 +40,7 @@ export default function Network() {
             statusMsg = 'Conectado a la red Wi-Fi'
         } else {
             icon = cellularIcon
-            effectiveType = (navigator as Navigator).connection?.effectiveType ?? ''
+            effectiveType = (navigator as NavigatorNetworkInformation).connection?.effectiveType ?? ''
             statusMsg = `Conectado a la red celular ${effectiveType}`
         }
     } else {
@@ -56,7 +52,7 @@ export default function Network() {
     useEffect(() => {
         const interval = setInterval(() => {
             // If there's no rtt, then there's no connection
-            setNetworkStatus((navigator as Navigator).connection?.rtt === 0 ? 'disconnected' : 'connected')
+            setNetworkStatus((navigator as NavigatorNetworkInformation).connection?.rtt === 0 ? 'disconnected' : 'connected')
         }, 1000)
         return () => clearInterval(interval);
     }, [])

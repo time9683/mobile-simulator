@@ -1,3 +1,4 @@
+import Battery from './Battery'
 import Network from './Network'
 import Power from './Power'
 import Time from './Time'
@@ -11,6 +12,7 @@ export default function OSHeader() {
             <p className='font-medium pointer-events-none'>VenecOS</p>
             <div className='min-w-12 justify-between flex'>
                 <Network />
+                <Battery />
                 <Power />
             </div>
             
