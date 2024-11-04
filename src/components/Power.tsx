@@ -1,15 +1,21 @@
+import { useRef, useContext } from 'react';
 import powerIcon from '../assets/power.webp';
 import whitePowerIcon from '../assets/whitePower.svg';
-import { useRef, useContext } from 'react';
-import { SettingsContext } from '../App';
 import Dialog from './Dialog';
 import Button from './Button';
-
-
+import { settingsContext} from '../App';
 
 export default function Power() {
     const ref = useRef<HTMLDialogElement>(null);
-    const power = useContext(settingsContext).power;
+    const { power, setPower } = useContext(settingsContext);
+
+    if (!power) {
+        return (
+            <button onClick={() => setPower(true)}>
+                <img src={whitePowerIcon} width='20' alt='Power'/>
+            </button>
+        )
+    }
 
     return (
         <>
@@ -28,7 +34,7 @@ export default function Power() {
                     </Button>
                     <Button onClick={() => {
                             ref.current?.close()
-
+                            setPower(false)
                         }}
                         className='bg-red-500 border-red-700 hover:bg-red-400 hover:border-red-500'
                     >
