@@ -8,52 +8,29 @@ import Camara from "@components/camara"
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
 
-    if (currentPage == "home") {
-        return <Home />
+    switch (currentPage) {
+        case "home":
+            return <Home />;
+        case "chrome":
+            return <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />;
+        case "netflix":
+            return <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />;
+        case "spotify":
+            return <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />;
+        case "amazon":
+            return <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />;
+        case "youtube":
+            return <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />;
+        case "galeria":
+            return <Galery />;
+        case "procesos":
+            return <ProcessList />;
+        case "camara":
+            return <Camara />;
     }
-
-
-    if (currentPage == "chrome"){
-        return <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />
-    }
-
-    if (currentPage == "netflix"){
-        return <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />
-    }
-
-    if (currentPage == "spotify"){
-        return <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />
-    }
-
-    if (currentPage == "amazon"){
-        return <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />
-    }
-
-    if (currentPage == "youtube"){
-        return <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />
-    }
-
-    if (currentPage == "galeria"){
-        return <Galery/>
-    }
-
-    if (currentPage == "procesos"){
-            return <ProcessList />
-    }
-
-    if (currentPage == "camara"){
-        return <Camara/>
-    }
-
-
 
     return <Home />
 }
-
-
-
-
-
 
 
 function Home() {
@@ -67,6 +44,7 @@ function Home() {
 
     )
 }
+
 
 interface App {
     name: string
@@ -115,8 +93,6 @@ const APPs: App[] = [
         
     }
 ]
-
-
 
 
 function Block() {
@@ -183,7 +159,6 @@ function Block() {
         }
     </section>
 }
-
 
 
 interface IconAppProps extends App {
