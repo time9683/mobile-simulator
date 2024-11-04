@@ -1,13 +1,15 @@
 import powerIcon from '../assets/power.webp';
-import { useRef } from 'react';
+import whitePowerIcon from '../assets/whitePower.svg';
+import { useRef, useContext } from 'react';
+import { SettingsContext } from '../App';
 import Dialog from './Dialog';
 import Button from './Button';
 
-// TODO:
-// 1. Create app context for settings and general states
-// 2. Add on/off functionality to the power button
+
+
 export default function Power() {
     const ref = useRef<HTMLDialogElement>(null);
+    const power = useContext(settingsContext).power;
 
     return (
         <>
@@ -26,6 +28,7 @@ export default function Power() {
                     </Button>
                     <Button onClick={() => {
                             ref.current?.close()
+
                         }}
                         className='bg-red-500 border-red-700 hover:bg-red-400 hover:border-red-500'
                     >

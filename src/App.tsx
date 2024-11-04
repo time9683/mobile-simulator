@@ -1,13 +1,20 @@
 import OSHeader from './components/OSHeader'
+import { useState, createContext } from 'react'
 
-function App() {
-
-  return (
-    <>
-      <OSHeader />
-      <p> filler</p>
-    </>
-  )
+export interface SettingsContext {
+  power: boolean,
+  setPower: (power: boolean) => void
 }
 
-export default App
+export const settingsContext = createContext<SettingsContext>({} as SettingsContext)
+
+export default function App() {
+  const [power, setPower] = useState(true)
+
+  return (
+    <settingsContext.Provider value={{power, setPower}}>
+      <OSHeader />
+      <p> filler</p>
+    </settingsContext.Provider >
+  )
+}
