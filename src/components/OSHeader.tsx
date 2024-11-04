@@ -8,7 +8,7 @@ export default function OSHeader() {
         <header className='bg-slate-50 w-screen flex justify-between px-2 top-0 fixed'>
             {/* Time format comes from settings, not statically typed */}
             <Time />
-            <p className='font-medium'>VenecOS</p>
+            <p className='font-medium pointer-events-none'>VenecOS</p>
             <div className='min-w-12 justify-between flex'>
                 <Network />
                 <Power />
