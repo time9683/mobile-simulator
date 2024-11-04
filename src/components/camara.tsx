@@ -9,6 +9,7 @@ export default function Camara() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
+        let streamRef: MediaStream | null = null
 
         async function setLatImage() {
             const images = await getImages()
@@ -22,12 +23,26 @@ export default function Camara() {
         if (videoRef.current) {
             navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
                 videoRef.current!.srcObject = stream
+                streamRef = stream
             })
         }
         setLatImage()
+       
+        return () => {
+            if (streamRef) {
+                console.log("stop")
+                streamRef.getTracks().forEach((track) => {
+                    track.stop()
+                })
+            }
+        }
 
 
     }, [])
+
+
+
+
 
     function saveImage() {
         if (canvasRef.current && videoRef.current) {
