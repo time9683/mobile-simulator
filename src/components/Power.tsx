@@ -1,13 +1,13 @@
 import { useRef, useContext } from 'react';
+import useMovilStore from '@stores/movil';
 import powerIcon from '../assets/power.webp';
 import whitePowerIcon from '../assets/whitePower.svg';
 import Dialog from './Dialog';
 import Button from './Button';
-import { settingsContext} from '../App';
 
 export default function Power() {
     const ref = useRef<HTMLDialogElement>(null);
-    const { power, setPower } = useContext(settingsContext);
+    const { power, setPower } = useMovilStore()
 
     if (!power) {
         return (
