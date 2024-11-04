@@ -2,7 +2,7 @@ import useMovilStore from '@stores/movil'
 import OSHeader from './components/OSHeader'
 import Page from '@components/page'
 import { useEffect } from 'react'
-function App() {
+export default function App() {
   const setInitTime =  useMovilStore((state) => state.setInitTime)
 
   useEffect(() => {
