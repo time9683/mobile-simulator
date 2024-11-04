@@ -129,16 +129,26 @@ function Block() {
     // const [ElementDrop, setElementDrop] = useState<HTMLElement | null>(null)
     function setAppsPosition(appName: string, row: number, column: number) {
         setApps((apps) => {
-            const newApps = apps.map((app) => {
-                if (app.name === appName) {
-                    return { ...app, row, column }
-                }
-                return app
-            })
-            localStorage.setItem("apps", JSON.stringify(newApps))
-            return newApps
-        }
-        )
+            const newApps = [...apps];
+            const existingAppIndex = newApps.findIndex(app => app.row === row && app.column === column);
+            const movingAppIndex = newApps.findIndex(app => app.name === appName);
+
+            if (existingAppIndex !== -1) {
+                // Swap positions
+                const tempRow = newApps[existingAppIndex].row;
+                const tempColumn = newApps[existingAppIndex].column;
+                newApps[existingAppIndex].row = newApps[movingAppIndex].row;
+                newApps[existingAppIndex].column = newApps[movingAppIndex].column;
+                newApps[movingAppIndex].row = tempRow;
+                newApps[movingAppIndex].column = tempColumn;
+            } else {
+                // Update position
+                newApps[movingAppIndex] = { ...newApps[movingAppIndex], row, column };
+            }
+
+            localStorage.setItem("apps", JSON.stringify(newApps));
+            return newApps;
+        });
     }
 
 
