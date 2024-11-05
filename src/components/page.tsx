@@ -4,32 +4,90 @@ import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
+import { motion, AnimatePresence } from "framer-motion"
+
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
+    const IconCoordinates = useMovilStore((state)=> state.IconAppCoordintes)
+    const [isVisible,setIsVisible] = useState(false)
 
+
+    useEffect(()=>{
+
+        if(currentPage !== "home"){
+            setIsVisible(true)
+        }else{
+            setIsVisible(false)
+        }
+
+
+    },[currentPage])
+
+
+
+
+    let secondPage = null;
     switch (currentPage) {
         case "home":
-            return <Home />;
+            secondPage = null;
+            break;
         case "chrome":
-            return <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />;
+            secondPage = <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />;
+            break;
         case "netflix":
-            return <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />;
+            secondPage = <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />;
+            break;
         case "spotify":
-            return <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />;
+            secondPage = <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />;
+            break;
         case "amazon":
-            return <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />;
+            secondPage = <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />;
+            break;
         case "youtube":
-            return <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />;
+            secondPage = <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />;
+            break;
         case "galeria":
-            return <Galery />;
+            secondPage = <Galery />;
+            break;
         case "procesos":
-            return <ProcessList />;
+            secondPage = <ProcessList />;
+            break;
         case "camara":
-            return <Camara />;
+            secondPage = <Camara />;
+            break;
     }
 
-    return <Home />
+
+    const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
+    const y = IconCoordinates && typeof IconCoordinates.y === 'number' ? IconCoordinates.y : 0;
+    const width = 90
+    const height = 114
+
+    console.log(x,y,width,height)
+
+
+    return (
+        <>
+          <AnimatePresence>
+            {isVisible && (
+              <motion.div
+                key="page"
+                initial={{ opacity: 0, scale: 0.5, x, y, width, height }}
+                animate={{ opacity: 1, scale: 1, x: 0, y: 0, width: "100%", height: "100%" }}
+                exit={{ opacity: 0, scale: 0.5, x, y, width, height }}
+                transition={{ duration: 0.5 }}
+                className="absolute top-0 left-0 w-full h-full bg-white z-10"
+              >
+                {secondPage}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <Home
+          
+          />
+        </>
+      );
 }
 
 
@@ -37,7 +95,7 @@ function Home() {
 
 
     return (
-        <main id="home" className="flex w-full p-2 h-screen">
+        <main id="home" className="flex w-full p-2 h-screen bg-black">
             <Block />
             {/* <Block /> */}
         </main>
@@ -177,9 +235,9 @@ interface IconAppProps extends App {
     index?: number
 }
 
-
 function IconApp(props: IconAppProps) {
     const setPage = useMovilStore((state) => state.changePage)
+    const setIconPosition = useMovilStore((state) => state.setIconAppCoordinates)
     const { row, column } = props;
     const ref = useRef<HTMLDivElement>(null)
 
@@ -206,6 +264,10 @@ function IconApp(props: IconAppProps) {
     return <div
     ref={ref}
     onClick={() => {
+        if(ref.current){
+        const { x, y } = ref.current.getBoundingClientRect();
+        setIconPosition(x,y)
+        }
         setPage(props.name)
     }}
 

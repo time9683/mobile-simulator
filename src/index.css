@@ -10,3 +10,38 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+
+@keyframes Incrise {
+  0% {
+    transform: scale(0);
+    display: none;
+  }
+  100% {
+    transform: scale(1);
+  }
+
+}
+
+@keyframes decrease {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+    display: none;
+  }
+  
+}
+
+
+
+.open{
+  animation: Incrise 0.5s;
+
+
+}
+
+.close{
+  animation: decrease 0.5s;
+}
