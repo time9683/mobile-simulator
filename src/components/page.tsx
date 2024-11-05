@@ -4,6 +4,7 @@ import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
+import Phone from "@components/Phone"
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
@@ -27,6 +28,8 @@ export default function Page() {
             return <ProcessList />;
         case "camara":
             return <Camara />;
+        case "telefono":
+            return <Phone />;
     }
 
     return <Home />
@@ -91,6 +94,10 @@ const APPs: App[] = [
         name: "camara",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/1373/1373061.png"
         
+    },
+    {
+        name: "telefono",
+        urlIcon: "https://cdn.iconscout.com/icon/free/png-256/free-apple-phone-icon-download-in-svg-png-gif-file-formats--logo-call-apps-pack-user-interface-icons-493154.png?f=webp&w=256"
     }
 ]
 
