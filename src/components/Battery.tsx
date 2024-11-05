@@ -26,7 +26,7 @@ export default function Battery() {
     useEffect(() => {
         const interval = setInterval(() => {
             (navigator as NavigatorBatteryManager).getBattery().then(batteryManager => {
-                setBattery(batteryManager.level * 100)
+                setBattery(Math.round(batteryManager.level * 100))
                 
                 if (batteryManager.level < 0.15) {
                     setColor('#ff004d')

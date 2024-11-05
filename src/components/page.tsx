@@ -59,10 +59,7 @@ export default function Page() {
         case "telefono":
             secondPage = <Phone />;
             break;
-
-
     }
-
 
     const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
     const y = IconCoordinates && typeof IconCoordinates.y === 'number' ? IconCoordinates.y : 0;
@@ -70,7 +67,6 @@ export default function Page() {
     const height = 114
 
     console.log(x,y,width,height)
-
 
     return (
         <div className="relative h-full">
