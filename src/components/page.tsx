@@ -6,7 +6,6 @@ import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
 import { motion, AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
-import Recorder from "@components/Recorder"
 
 
 export default function Page() {
@@ -57,6 +56,9 @@ export default function Page() {
             break;
         case "camara":
             secondPage = <Camara />;
+            break;
+        case "telefono":
+            secondPage = <Phone />;
             break;
 
 
