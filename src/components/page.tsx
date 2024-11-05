@@ -6,6 +6,8 @@ import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
 import { motion, AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
+import Recorder from "@components/Recorder"
+
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
@@ -56,9 +58,8 @@ export default function Page() {
         case "camara":
             secondPage = <Camara />;
             break;
-        case "telefono":
-            secondPage = <Phone />;
-            break;
+
+
     }
 
     const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
@@ -156,6 +157,10 @@ const APPs: App[] = [
     {
         name: "telefono",
         urlIcon: "https://cdn.iconscout.com/icon/free/png-256/free-apple-phone-icon-download-in-svg-png-gif-file-formats--logo-call-apps-pack-user-interface-icons-493154.png?f=webp&w=256"
+    },
+    {
+        name:"recorder",
+        urlIcon:"https://cdn-icons-png.flaticon.com/512/3817/3817556.png"
     }
 ]
 
