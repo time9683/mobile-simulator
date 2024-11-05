@@ -70,7 +70,7 @@ export default function Page() {
 
 
     return (
-        <>
+        <div className="relative h-full">
           <AnimatePresence>
             {isVisible && (
               <motion.div
@@ -86,7 +86,7 @@ export default function Page() {
             )}
           </AnimatePresence>
           <Home/>
-        </>
+        </div>
       );
 }
 
@@ -100,7 +100,7 @@ function Home() {
     return (
         <main id="home" 
         style={style}
-         className="flex w-full p-2 h-screen bg-black">
+         className="flex w-full p-2 h-full bg-black">
             <Block />
             {/* <Block /> */}
         </main>
