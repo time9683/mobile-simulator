@@ -189,7 +189,11 @@ export default function Component() {
             
           <div className="mt-4 space-y-2">
             {contacts.map((contact, index) => (
-              <div key={index} className="flex justify-between items-center">
+              <div key={index} className="flex justify-between items-center" onClick={() => {
+                setNumber(contact.number)
+                startCall()
+                contactsRef.current?.close()
+              }}>
                 <span>{contact.name}</span>
                 <span>{contact.number}</span>
               </div>
