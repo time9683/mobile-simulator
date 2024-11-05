@@ -4,8 +4,11 @@
 
 
 
+
+
 #home{
-  background-image: url("https://wallpapers.com/images/hd/abstract-aurora-android-tablet-dmyrxtj1whfedfuu.jpg");
+  --bg-wallpaper: url("https://wallpapers.com/images/hd/abstract-aurora-android-tablet-dmyrxtj1whfedfuu.jpg");
+  background-image: var(--bg-wallpaper);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
