@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
-import { Mic, Hash, Phone, PhoneOff, Volume2, Keyboard } from 'lucide-react'
+import { Mic, Phone, PhoneOff, Volume2, Keyboard } from 'lucide-react'
 import Dial from '../assets/dial.wav'
 
 export default function Component() {
