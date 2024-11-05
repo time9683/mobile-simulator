@@ -120,13 +120,13 @@ export default function Component() {
           onClick={() => addContactRef.current?.showModal()}
         >
           <UserPlus className="h-4 w-4 mr-2" />
-          Add Contact
+          Añadir Contacto
         </Button>  : ''
       }
 
       <Dialog someRef={addContactRef}>
-        <div className='flex'>
-          <p className='font-bold'> Añadir contacto </p>
+        <div className='flex justify-between'>
+          <p className='font-bold'> Nuevo contacto </p>
           <button onClick={() => {addContactRef.current?.close()}}>
             <p className='font-light text-sm' > x </p>
           </button>
@@ -138,7 +138,7 @@ export default function Component() {
             value={newContactName}
             onChange={(e) => setNewContactName(e.target.value)}
           />
-          <div>Number: {number}</div>
+          <div>Número: {number}</div>
           <Button onClick={() => {saveContact({name: newContactName, number: number})}}>Añadir Contacto</Button>
         </div>
       </Dialog>
@@ -180,7 +180,7 @@ export default function Component() {
               <Users className="h-6 w-6" />
         </Button>
         <Dialog someRef={contactsRef}>
-          <div className='flex'>
+          <div className='flex justify-between min-w-40'>
             <p className='font-bold'> Contactos </p>
             <button onClick={() => {contactsRef.current?.close()}}>
               <p className='font-light text-sm' > x </p>
