@@ -65,7 +65,7 @@ export function getContacts(): Promise<Contact[]> {
             const store = tx.objectStore(CONTACTS)
             const rq = store.getAll()
             rq.onsuccess = () => {
-                resolve(rq.result.map((contact: Contact) => contact))
+                resolve(rq.result.map((item: {contact: Contact}) => item.contact))
             }
         }
     })

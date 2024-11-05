@@ -139,7 +139,7 @@ export default function Component() {
             onChange={(e) => setNewContactName(e.target.value)}
           />
           <div>Número: {number}</div>
-          <Button onClick={() => {saveContact({name: newContactName, number: number})}}>Añadir Contacto</Button>
+          <Button onClick={async () => {await saveContact({name: newContactName, number: number})}}>Añadir Contacto</Button>
         </div>
       </Dialog>
       
@@ -176,6 +176,7 @@ export default function Component() {
         <Button variant="ghost" size="lg" className="aspect-square" onClick={async () => {
           contactsRef.current?.showModal()
           setContacts(await getContacts())
+          console.log(contacts)
         }}>
               <Users className="h-6 w-6" />
         </Button>
