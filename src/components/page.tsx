@@ -1,5 +1,5 @@
 import useMovilStore from "@stores/movil.ts"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState,CSSProperties } from "react"
 import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
@@ -56,6 +56,8 @@ export default function Page() {
         case "camara":
             secondPage = <Camara />;
             break;
+
+
     }
 
 
@@ -83,19 +85,22 @@ export default function Page() {
               </motion.div>
             )}
           </AnimatePresence>
-          <Home
-          
-          />
+          <Home/>
         </>
       );
 }
 
 
 function Home() {
-
+    // create a css property called --bg-wallpaper
+    const style: CSSProperties & { [key: string]: string } = {
+        // "--bg-wallpaper": "url(https://img.asmedia.epimg.net/resizer/v2/NZTAJMVYTVHDJMOWYTEK3KKE6U.webp?auth=058fa8d2b79580189b58fd9d21735ad0c0d746352ae3bbc18185b915535e01c3&width=1472&height=1104&smart=true)"
+    }
 
     return (
-        <main id="home" className="flex w-full p-2 h-screen bg-black">
+        <main id="home" 
+        style={style}
+         className="flex w-full p-2 h-screen bg-black">
             <Block />
             {/* <Block /> */}
         </main>
@@ -109,7 +114,6 @@ interface App {
     urlIcon: string
     column?: number 
     row?: number 
-    // component: React.FC
 }
 // whatsapp, facebook, instagram, twitter, youtube, tiktok, netflix, spotify, amazon, linkedin
 const APPs: App[] = [

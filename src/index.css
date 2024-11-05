@@ -4,44 +4,12 @@
 
 
 
+
+
 #home{
-  background-image: url("https://wallpapers.com/images/hd/abstract-aurora-android-tablet-dmyrxtj1whfedfuu.jpg");
+  --bg-wallpaper: url("https://wallpapers.com/images/hd/abstract-aurora-android-tablet-dmyrxtj1whfedfuu.jpg");
+  background-image: var(--bg-wallpaper);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-}
-
-
-@keyframes Incrise {
-  0% {
-    transform: scale(0);
-    display: none;
-  }
-  100% {
-    transform: scale(1);
-  }
-
-}
-
-@keyframes decrease {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-    display: none;
-  }
-  
-}
-
-
-
-.open{
-  animation: Incrise 0.5s;
-
-
-}
-
-.close{
-  animation: decrease 0.5s;
 }
