@@ -92,7 +92,13 @@ export default function Recorder(){
             track.stop()
           })
           const blob = new Blob(chunk.current,{type:"audio/wav"})
-          const duration = Date.now() - initialTime.current
+          // const duration = Date.now() - initialTime.current
+
+          const newAudio = new Audio(URL.createObjectURL(blob))
+          newAudio.ondurationchange = ()=>{
+            const duration = newAudio.duration
+            if (isFinite(duration)){
+
           const id = Math.random().toString(36).substring(7)
           const newItem = {
             time: initialTime.current,
@@ -107,6 +113,17 @@ export default function Recorder(){
             blob,
             time: initialTime.current
           })
+            
+          newAudio.remove()
+          
+            }
+
+          }
+          newAudio.load()
+          newAudio.currentTime = 24 * 60 * 60
+          newAudio.volume = 0
+          newAudio.play()
+
         }
 
         mediaRef.current.start()
@@ -240,7 +257,7 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
       }
     },[audio,seleted])
 
-    const witdh = currentTime/(duration/1000)
+    const witdh = currentTime/duration
 
   return (
     <li className="flex  flex-col gap-4  text-white p-6 bg-neutral-800 rounded-xl"
@@ -278,7 +295,7 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
           <span className="text-neutral-400 text-sm">
             
             { seleted ?? currentTime ? formatTime(Math.floor(currentTime)) : "00:00"}
-             {seleted ? <span className="text-green-400">/{duration ?  formatTime(duration/1000) : "00:00:00"}</span> : null} </span>
+             {seleted ? <span className="text-green-400">/{duration ?  formatTime(duration) : "00:00:00"}</span> : null} </span>
         </div>
 
     {/* bar progress red */}
