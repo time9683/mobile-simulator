@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Mic, Phone, PhoneOff, Volume2, Keyboard, Users, UserPlus} from 'lucide-react'
 import Dial from '../assets/dial.wav'
+import tono from '@/assets/tono.mp3'
 import Dialog from './Dialog.tsx'
 import {saveContact, getContacts, Contact} from "@/services/indexdb"
 import useMovilStore from '@stores/movil.ts'
@@ -28,6 +29,8 @@ export default function Component() {
   const localAudioRef = useRef<HTMLAudioElement>(null)
   // const [peer, setPeer] = useState<SimplePeer.Instance | null>(null)
   const peer = useRef<SimplePeer.Instance | null>(null)
+
+  const tonoAudio = useRef(new Audio(tono))
 
   const socket = useMovilStore((state) => state.socket)
 
@@ -101,6 +104,7 @@ export default function Component() {
     setIdfrom(null);
     peer.current?.destroy();
     peer.current = null;
+    tonoAudio.current.pause()
   };
 
   const handleCancelCall = () => {
@@ -114,6 +118,8 @@ export default function Component() {
   };
 
   const handleAcceptCall = async () => {
+    // desactivar sonido de tono
+    tonoAudio.current.pause()
     setValidated(true);
   };
 
@@ -168,6 +174,8 @@ export default function Component() {
       console.log("creating peer");
       await createPeer(number.toString(), false);
       setInCall(true);
+      tonoAudio.current.currentTime = 0
+      tonoAudio.current.play()
       socket?.emit('call', { targetId: number });
     }
   };
@@ -179,6 +187,7 @@ export default function Component() {
     peer.current?.destroy();
     peer.current = null;
     setIdfrom(null);
+    tonoAudio.current.pause()
     socket?.emit('CancelCall', { targetId: number });
   };
 
