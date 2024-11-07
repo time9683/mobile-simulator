@@ -82,7 +82,7 @@ export default function Galery() {
 
 
     return (
-      <main className="w-full p-2 h-screen overflow-auto  bg-white" onDrop={onDrop} 
+      <main className="w-full p-2 h-full overflow-auto  bg-white" onDrop={onDrop} 
       onDragOver={(event)=>event.preventDefault()}
 
       >
