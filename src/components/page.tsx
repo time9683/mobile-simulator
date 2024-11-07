@@ -6,7 +6,8 @@ import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
 import { motion, AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
-import Recorder from "./Recorder"
+import Recorder from "@components/Recorder"
+import  Whatsapp  from "@components/Whassapp"
 
 
 export default function Page() {
@@ -63,6 +64,9 @@ export default function Page() {
             break;
         case "recorder":
             secondPage = <Recorder/>
+            break;
+        case "whatsapp":
+            secondPage = <Whatsapp/>
             break;
         
 
