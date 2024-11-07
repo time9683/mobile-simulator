@@ -116,7 +116,7 @@ export default function Galery() {
         </div>
         {
           selectedImages.length > 0 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-gray-900 p-2 flex justify-between items-center">
+            <div className="fixed bottom-8 left-0 right-0 bg-gray-900 p-2 flex justify-between items-center">
               <p className="text-white">{selectedImages.length} selected</p>
               <button
                 onClick={() => {

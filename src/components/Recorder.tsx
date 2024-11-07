@@ -243,7 +243,6 @@ const format  = new Intl.DateTimeFormat('default', { day: '2-digit', month: 'sho
 // element of the list of the recorder
 function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,handleDelete,time}:RecorderItemProps){
     const [currentTime,setCurrentTime] = useState(0)
-    const [position,setPosition] = useState(0)
     // const [duration,setDuration] = useState(0)
 
     useEffect(()=>{
@@ -310,11 +309,6 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
         >
             {/* indicator where is the video with a circle */}
             <div className="w-4 h-4 bg-red-500 rounded-full absolute top-0 -mt-1 left-full"
-            onMouseDown={(div)=>{
-              document.addEventListener('mousemove',(e)=>{
-                // div.target.style.left = `${e.clientX}px`
-              })
-            }}
             />
           </div>
         </div>

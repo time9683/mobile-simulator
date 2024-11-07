@@ -4,108 +4,113 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@radix-ui/react-icons':
-    specifier: ^1.3.1
-    version: 1.3.1(react@18.3.1)
-  '@radix-ui/react-slot':
-    specifier: ^1.1.0
-    version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
-  '@types/simple-peer':
-    specifier: ^9.11.8
-    version: 9.11.8
-  buffer:
-    specifier: ^6.0.3
-    version: 6.0.3
-  class-variance-authority:
-    specifier: ^0.7.0
-    version: 0.7.0
-  clsx:
-    specifier: ^2.1.1
-    version: 2.1.1
-  framer-motion:
-    specifier: ^11.11.11
-    version: 11.11.11(react-dom@18.3.1)(react@18.3.1)
-  lucide-react:
-    specifier: ^0.454.0
-    version: 0.454.0(react@18.3.1)
-  process:
-    specifier: ^0.11.10
-    version: 0.11.10
-  react:
-    specifier: 18.3.1
-    version: 18.3.1
-  react-dom:
-    specifier: 18.3.1
-    version: 18.3.1(react@18.3.1)
-  simple-peer:
-    specifier: ^9.11.1
-    version: 9.11.1
-  socket.io-client:
-    specifier: ^4.8.1
-    version: 4.8.1
-  stream-browserify:
-    specifier: ^3.0.0
-    version: 3.0.0
-  tailwind-merge:
-    specifier: ^2.5.4
-    version: 2.5.4
-  tailwindcss-animate:
-    specifier: ^1.0.7
-    version: 1.0.7(tailwindcss@3.4.14)
-  use-long-press:
-    specifier: ^3.2.0
-    version: 3.2.0(react@18.3.1)
-  zustand:
-    specifier: 5.0.1
-    version: 5.0.1(@types/react@18.3.12)(react@18.3.1)
+importers:
 
-devDependencies:
-  '@eslint/js':
-    specifier: 9.13.0
-    version: 9.13.0
-  '@types/node':
-    specifier: 22.8.6
-    version: 22.8.6
-  '@types/react':
-    specifier: 18.3.12
-    version: 18.3.12
-  '@types/react-dom':
-    specifier: 18.3.1
-    version: 18.3.1
-  '@vitejs/plugin-react-swc':
-    specifier: 3.5.0
-    version: 3.5.0(vite@5.4.10)
-  autoprefixer:
-    specifier: 10.4.20
-    version: 10.4.20(postcss@8.4.47)
-  eslint:
-    specifier: 9.13.0
-    version: 9.13.0
-  eslint-plugin-react-hooks:
-    specifier: 5.0.0
-    version: 5.0.0(eslint@9.13.0)
-  eslint-plugin-react-refresh:
-    specifier: 0.4.14
-    version: 0.4.14(eslint@9.13.0)
-  globals:
-    specifier: 15.11.0
-    version: 15.11.0
-  postcss:
-    specifier: 8.4.47
-    version: 8.4.47
-  tailwindcss:
-    specifier: 3.4.14
-    version: 3.4.14
-  typescript:
-    specifier: ~5.6.2
-    version: 5.6.3
-  typescript-eslint:
-    specifier: 8.11.0
-    version: 8.11.0(eslint@9.13.0)(typescript@5.6.3)
-  vite:
-    specifier: 5.4.10
-    version: 5.4.10(@types/node@22.8.6)
+  .:
+    dependencies:
+      '@radix-ui/react-icons':
+        specifier: ^1.3.1
+        version: 1.3.1(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
+      '@types/simple-peer':
+        specifier: ^9.11.8
+        version: 9.11.8
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.0
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      events:
+        specifier: ^3.3.0
+        version: 3.3.0
+      framer-motion:
+        specifier: ^11.11.11
+        version: 11.11.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.454.0
+        version: 0.454.0(react@18.3.1)
+      process:
+        specifier: ^0.11.10
+        version: 0.11.10
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      simple-peer:
+        specifier: ^9.11.1
+        version: 9.11.1
+      socket.io-client:
+        specifier: ^4.8.1
+        version: 4.8.1
+      stream-browserify:
+        specifier: ^3.0.0
+        version: 3.0.0
+      tailwind-merge:
+        specifier: ^2.5.4
+        version: 2.5.4
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@3.4.14)
+      use-long-press:
+        specifier: ^3.2.0
+        version: 3.2.0(react@18.3.1)
+      zustand:
+        specifier: 5.0.1
+        version: 5.0.1(@types/react@18.3.12)(react@18.3.1)
+    devDependencies:
+      '@eslint/js':
+        specifier: 9.13.0
+        version: 9.13.0
+      '@types/node':
+        specifier: 22.8.6
+        version: 22.8.6
+      '@types/react':
+        specifier: 18.3.12
+        version: 18.3.12
+      '@types/react-dom':
+        specifier: 18.3.1
+        version: 18.3.1
+      '@vitejs/plugin-react-swc':
+        specifier: 3.5.0
+        version: 3.5.0(vite@5.4.10(@types/node@22.8.6))
+      autoprefixer:
+        specifier: 10.4.20
+        version: 10.4.20(postcss@8.4.47)
+      eslint:
+        specifier: 9.13.0
+        version: 9.13.0(jiti@1.21.6)
+      eslint-plugin-react-hooks:
+        specifier: 5.0.0
+        version: 5.0.0(eslint@9.13.0(jiti@1.21.6))
+      eslint-plugin-react-refresh:
+        specifier: 0.4.14
+        version: 0.4.14(eslint@9.13.0(jiti@1.21.6))
+      globals:
+        specifier: 15.11.0
+        version: 15.11.0
+      postcss:
+        specifier: 8.4.47
+        version: 8.4.47
+      tailwindcss:
+        specifier: 3.4.14
+        version: 3.4.14
+      typescript:
+        specifier: ~5.6.2
+        version: 5.6.3
+      typescript-eslint:
+        specifier: 8.11.0
+        version: 8.11.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.6.3)
+      vite:
+        specifier: 5.4.10
+        version: 5.4.10(@types/node@22.8.6)
 
 packages:
 
@@ -1367,7 +1372,11 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /fast-deep-equal@3.1.3:
+  events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+
+  fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     dev: true
 
@@ -2916,21 +2925,16 @@ snapshots:
     engines: {node: '>=4.0'}
     dependencies:
       estraverse: 5.3.0
-    dev: true
-  /estraverse@5.3.0:
-    resolution: {integrity: sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==}
-    engines: {node: '>=4.0'}
-    dev: true
-  /esutils@2.0.3:
-    resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
-    engines: {node: '>=0.10.0'}
-    dev: true
-  /fast-deep-equal@3.1.3:
-    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
-  /fast-glob@3.3.2:
-    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
-    engines: {node: '>=8.6.0'}
+
+  estraverse@5.3.0: {}
+
+  esutils@2.0.3: {}
+
+  events@3.3.0: {}
+
+  fast-deep-equal@3.1.3: {}
+
+  fast-glob@3.3.2:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
       '@nodelib/fs.walk': 1.2.8

@@ -6,6 +6,8 @@ import Dial from '../assets/dial.wav'
 import Dialog from './Dialog.tsx'
 import {saveContact, getContacts, Contact} from "@/services/indexdb"
 import useMovilStore from '@stores/movil.ts'
+import SimplePeer from 'simple-peer'
+
 
 
 export default function Component() {
@@ -25,7 +27,7 @@ export default function Component() {
   const remoteAudioRef = useRef<HTMLAudioElement>(null)
   const localAudioRef = useRef<HTMLAudioElement>(null)
   // const [peer, setPeer] = useState<SimplePeer.Instance | null>(null)
-  const peer = useRef<Simpletype.Instance | null>(null)
+  const peer = useRef<SimplePeer.Instance | null>(null)
 
   const socket = useMovilStore((state) => state.socket)
 
@@ -115,7 +117,7 @@ export default function Component() {
     setValidated(true);
   };
 
-  const handleSignal = ({ signal }) => {
+  const handleSignal = ({ signal }:{signal:string}) => {
     console.log("socket signal event");
     if (peer.current) {
       console.log('signal event');
