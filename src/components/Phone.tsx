@@ -5,79 +5,209 @@ import { Mic, Phone, PhoneOff, Volume2, Keyboard, Users, UserPlus} from 'lucide-
 import Dial from '../assets/dial.wav'
 import Dialog from './Dialog.tsx'
 import {saveContact, getContacts, Contact} from "@/services/indexdb"
+import useMovilStore from '@stores/movil.ts'
+
 
 export default function Component() {
-  const [number, setNumber] = useState('')
+  const setIdfrom = useMovilStore((state) => state.setEntryCallId)
+  const idFrom = useMovilStore((state)=> state.EntryCallId)
+
+  const [number, setNumber] = useState( idFrom?.toString() || '')
   const [inCall, setInCall] = useState(false)
   const [callDuration, setCallDuration] = useState(0)
   const [validated, setValidated] = useState(false)
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
   const [contacts, setContacts] = useState<Contact[]>([])
   const [newContactName, setNewContactName] = useState('')
-
   const contactsRef = useRef<HTMLDialogElement>(null);
   const addContactRef = useRef<HTMLDialogElement>(null);
 
+  const remoteAudioRef = useRef<HTMLAudioElement>(null)
+  const localAudioRef = useRef<HTMLAudioElement>(null)
+  // const [peer, setPeer] = useState<SimplePeer.Instance | null>(null)
+  const peer = useRef<Simpletype.Instance | null>(null)
+
+  const socket = useMovilStore((state) => state.socket)
+
+  const createPeer = useCallback(async (number: string, initiator: boolean) => {
+    if (!localAudioRef.current){
+      console.error('localAudioRef.current is null')
+      return
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    if (!stream) {
+      console.error('stream is null')
+      return
+    }
+
+    const newPeer = new SimplePeer({
+      stream: stream,
+      initiator: initiator,
+      trickle: true,
+    });
+
+    newPeer.on("signal", (signal) => {
+      socket?.emit("signal", { targetId: number, signal });
+    });
+
+    newPeer.on("connect", () => {
+      console.log('Peer connected');
+      setValidated(true);
+    });
+
+    newPeer.on("stream", (stream) => {
+      if (remoteAudioRef.current) {
+        remoteAudioRef.current.srcObject = stream;
+      } else {
+        console.error('remoteAudioRef.current is null')
+      }
+    });
+
+    newPeer.on("error", () => {
+      console.log('Peer closed');
+    });
+    if(socket){
+      socket.off('signal', handleSignal);
+      socket.on('signal', handleSignal);
+    }
+     peer.current = newPeer;
+  }, [socket]);
+
+  const handleSocketEvents = useCallback(() => {
+    if (socket) {
+      console.log("creando eventos de socket")
+      socket.on('rejectCall', handleRejectCall);
+      socket.on("CancelCall", handleCancelCall);
+      socket.on("acceptCall", handleAcceptCall);
+
+      return () => {
+        socket.off('rejectCall', handleRejectCall);
+        socket.off('CancelCall', handleCancelCall);
+        socket.off('acceptCall', handleAcceptCall);
+        socket.off('signal', handleSignal);
+        peer.current?.destroy();
+      }
+    }
+  }, [socket, peer]);
+
+  const handleRejectCall = () => {
+    console.log('rejectCall event');
+    setInCall(false);
+    setValidated(false);
+    setCallDuration(0);
+    setIdfrom(null);
+    peer.current?.destroy();
+    peer.current = null;
+  };
+
+  const handleCancelCall = () => {
+    console.log('CancelCall event');
+    setInCall(false);
+    setValidated(false);
+    setIdfrom(null);
+    setCallDuration(0);
+    peer.current?.destroy();
+    peer.current = null;
+  };
+
+  const handleAcceptCall = async () => {
+    setValidated(true);
+  };
+
+  const handleSignal = ({ signal }) => {
+    console.log("socket signal event");
+    if (peer.current) {
+      console.log('signal event');
+      peer.current.signal(signal);
+    }
+  };
+
   useEffect(() => {
-    setAudio(new Audio(Dial))
-  }, [])
+    if (idFrom !== null && !peer.current ) {
+      setNumber(idFrom.toString());
+      const initiatePeer = async () => {
+        console.log("creating peer from idFrom");
+        await createPeer(idFrom.toString(), true);
+        setValidated(true);
+        setInCall(true);
+      }
+      initiatePeer();
+    }
+  }, [idFrom, createPeer]);
+
+  useEffect(() => {
+    handleSocketEvents();
+  }, [handleSocketEvents]);
+
+  useEffect(() => {
+    setAudio(new Audio(Dial));
+  }, []);
 
   const playDialSound = useCallback(() => {
     if (audio) {
-      audio.currentTime = 0
-      audio.play()
+      audio.currentTime = 0;
+      audio.play();
     }
-  }, [audio])
+  }, [audio]);
 
   const addDigit = (digit: string) => {
-    setNumber(prev => (prev + digit).slice(-20))
-    playDialSound()
-  }
+    setNumber(prev => (prev + digit).slice(-20));
+    playDialSound();
+  };
 
   const deleteDigit = () => {
-    setNumber(prev => prev.slice(0, -1))
-  }
+    setNumber(prev => prev.slice(0, -1));
+  };
 
-  const startCall = () => {
+  const startCall = async () => {
     if (number.length > 0) {
-      setInCall(true)
-      // Simulating call validation after 3 seconds
-      setTimeout(() => setValidated(true), 3000)
+      if (number === null) return;
+      console.log("creating peer");
+      await createPeer(number.toString(), false);
+      setInCall(true);
+      socket?.emit('call', { targetId: number });
     }
-  }
+  };
 
   const endCall = () => {
-    setInCall(false)
-    setValidated(false)
-    setCallDuration(0)
-  }
+    setInCall(false);
+    setValidated(false);
+    setCallDuration(0);
+    peer.current?.destroy();
+    peer.current = null;
+    setIdfrom(null);
+    socket?.emit('CancelCall', { targetId: number });
+  };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout;
     if (inCall && validated) {
       interval = setInterval(() => {
-        setCallDuration(prev => prev + 1)
-      }, 1000)
+        setCallDuration(prev => prev + 1);
+      }, 1000);
     }
-    return () => clearInterval(interval)
-  }, [inCall, validated])
+    return () => clearInterval(interval);
+  }, [inCall, validated]);
 
   const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const dialPad = [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
     ['*', '0', '#']
-  ]
+  ];
 
   if (inCall) {
     return (
       <div className="flex flex-col items-center justify-between h-full bg-gray-100 p-6">
+        <audio ref={remoteAudioRef} autoPlay />
+        <audio ref={localAudioRef} autoPlay muted />
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">{number}</h2>
           <p className="text-lg">
@@ -109,6 +239,8 @@ export default function Component() {
 
   return (
     <div className="flex flex-col items-center justify-between h-full bg-gray-100 p-6">
+      <audio ref={remoteAudioRef} autoPlay />
+      <audio ref={localAudioRef} autoPlay muted />
       <div className="text-4xl font-light mb-6 h-12 overflow-hidden">
         {number}
       </div>
@@ -130,7 +262,6 @@ export default function Component() {
           <button onClick={() => {addContactRef.current?.close()}}>
             <p className='font-light text-sm' > x </p>
           </button>
-
         </div>
         <div className="mt-4 space-y-4">
           <Input
@@ -178,7 +309,7 @@ export default function Component() {
           setContacts(await getContacts())
           console.log(contacts)
         }}>
-              <Users className="h-6 w-6" />
+          <Users className="h-6 w-6" />
         </Button>
         <Dialog someRef={contactsRef}>
           <div className='flex justify-between min-w-40'>
@@ -187,7 +318,6 @@ export default function Component() {
               <p className='font-light text-sm' > x </p>
             </button>
           </div>
-            
           <div className="mt-4 space-y-2">
             {contacts.map((contact, index) => (
               <div key={index} className="flex justify-between items-center" onClick={() => {

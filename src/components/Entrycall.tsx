@@ -13,13 +13,19 @@ interface EntryCallProps {
 
 export default function EntryCall({IdFrom, isVisible, setIsVisible}: EntryCallProps) {
   const setCurrentPage = useMovilStore((state) => state.changePage)
+  const socket = useMovilStore((state) => state.socket)
+  const setidFrom =  useMovilStore((state)=> state.setEntryCallId)
 
   const handleAnswer = () => {
     setIsVisible(false)
+    socket?.emit("acceptCall",{targetId:IdFrom})
+    setidFrom(Number(IdFrom))
     setCurrentPage("telefono")
   }
 
   const handleReject = () => {
+    console.log('rejectCall event client send');
+    socket?.emit('rejectCall',{targetId:IdFrom})
     setIsVisible(false)
   }
 

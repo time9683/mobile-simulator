@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+import {Socket} from 'socket.io-client'
 type NetworkStatus = 'connected' | 'disconnected';
 
 interface MovilState {
@@ -13,9 +13,13 @@ interface MovilState {
 	// calcule or from the local storage
 	initTime: number,
 	IconAppCoordintes : { x:number,y:number } | null
+	socket:Socket| null
 	changePage: (newPage: string) => void,
 	setInitTime: (time: number) => void,
 	setIconAppCoordinates:  (x:number,y:number) => void
+	setSocket:(socket:Socket) => void,
+	EntryCallId:number|null,
+	setEntryCallId:(number:number|null) => void
 }
 
 
@@ -30,9 +34,13 @@ const useMovilStore = create<MovilState>((set) => ({
 	setBattery: (battery: number) => set(() => ({ battery })),
 	networkStatus: 'disconnected',
 	IconAppCoordintes:null,
+	socket:null,
+	EntryCallId:null,
 	setIconAppCoordinates:(x:number,y:number) => set(()=> ({IconAppCoordintes:{x,y}})),
 	setNetworkStatus: (status: NetworkStatus) => set(() => ({ networkStatus: status })),
 	changePage: (newPage: string) => set(() => ({ currentPage: newPage })),
-	setInitTime: (time: number) => set(() => ({ initTime: time }))
+	setInitTime: (time: number) => set(() => ({ initTime: time })),
+	setSocket:(socket:Socket) => set(() => ({socket})),
+	setEntryCallId:(EntryCallId:number|null) => set(()=> ({EntryCallId}))
 }))
 export default useMovilStore
