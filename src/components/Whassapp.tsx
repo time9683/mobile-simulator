@@ -1,5 +1,5 @@
 import {Camera,Search,EllipsisVertical,MessageSquareTextIcon,MessageCircleDashed,Users2,Phone} from "lucide-react"
-
+import avatar from "@/assets/avatar.png"
 
 
 const Contacts = [
@@ -20,7 +20,7 @@ const Contacts = [
     id:3,
     name:"Mario",
     lastMessage:"recuerda que lo de SO tiene informe",
-    avatar:"/src/assets/avatar.png"
+    avatar
   }
 ]
 
