@@ -303,7 +303,7 @@ function IconApp(props: IconAppProps) {
     style={style}    
     className={` w-[90px] aspect-square rounded flex flex-col items-center justify-center`}
     >
-        <img src={props.urlIcon} alt={props.name} className="w-full  object-contain" />
+        <img src={props.urlIcon} alt={props.name} className="w-2/3  object-contain " />
         <p className="text-center text-white">{props.name}</p>
     </div>
 }
