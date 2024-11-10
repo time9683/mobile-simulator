@@ -4,8 +4,8 @@ export default function Time() {
     const [time, setTime] = useState(new Date())
     const [format, setFormat] = useState('24h')
 
-    let hours = format === '12h' && time.getHours() > 12 ? time.getHours() - 12 : time.getHours()
-    let minutes = time.getMinutes().toString().padStart(2, '0')
+    const hours = format === '12h' && time.getHours() > 12 ? time.getHours() - 12 : time.getHours()
+    const minutes = time.getMinutes().toString().padStart(2, '0')
     let appendix = ''
 
     if (format === '12h') {
