@@ -203,16 +203,26 @@ function Block() {
                 ElementDrag.style.display = "none"
             })
 
-
-            ElementDrag.addEventListener("dragend", (event) => {
-                
-                const { clientX: x, clientY: y } = event as DragEvent;
+            const handleDragEnd = (event: DragEvent) => {
+                const { clientX: x, clientY: y } = event;
                 const [row, column] = getRowAndColumn(x, y, 98);
-                // console.log(row, column)
+
+                // Ensure the app is within the screen bounds
+                const maxRow = Math.floor(window.innerHeight / 98);
+                const maxColumn = Math.floor(window.innerWidth / 98);
+                const boundedRow = Math.min(Math.max(row, 1), maxRow);
+                const boundedColumn = Math.min(Math.max(column, 1), maxColumn);
+
                 ElementDrag.style.display = "flex";
-                setAppsPosition(ElementDrag.textContent as string, row, column);
+                setAppsPosition(ElementDrag.textContent as string, boundedRow, boundedColumn);
                 setElementDrag(null);
-            })
+            };
+
+            ElementDrag.addEventListener("dragend", handleDragEnd);
+
+            return () => {
+                ElementDrag.removeEventListener("dragend", handleDragEnd);
+            };
 
 
         }
