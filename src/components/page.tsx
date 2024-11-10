@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
 import  Whatsapp  from "@components/Whassapp"
+import NavigationView from "./NavigationView"
 
 
 export default function Page() {
@@ -34,6 +35,9 @@ export default function Page() {
     switch (currentPage) {
         case "home":
             secondPage = null;
+            break;
+        case "Navigation":
+            secondPage = <NavigationView/>
             break;
         case "chrome":
             secondPage = <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />;
@@ -89,7 +93,7 @@ export default function Page() {
                 animate={{ opacity: 1, scale: 1, x: 0, y: 0, width: "100%", height: "100%" }}
                 exit={{ opacity: 0, scale: 0.5, x, y, width, height }}
                 transition={{ duration: 0.5 }}
-                className="absolute top-0 left-0 w-full h-full bg-white z-10"
+                className={`absolute top-0 left-0 w-full h-full z-10 bg-black bg-opacity-50`}
               >
                 {secondPage}
               </motion.div>
@@ -260,6 +264,7 @@ interface IconAppProps extends App {
 function IconApp(props: IconAppProps) {
     const setPage = useMovilStore((state) => state.changePage)
     const setIconPosition = useMovilStore((state) => state.setIconAppCoordinates)
+    const addProcess = useMovilStore((state) => state.addProcess)
     const { row, column } = props;
     const ref = useRef<HTMLDivElement>(null)
 
@@ -290,6 +295,7 @@ function IconApp(props: IconAppProps) {
         const { x, y } = ref.current.getBoundingClientRect();
         setIconPosition(x,y)
         }
+        addProcess({name:props.name,urlIcon:props.urlIcon,component:()=>null})
         setPage(props.name)
     }}
 
