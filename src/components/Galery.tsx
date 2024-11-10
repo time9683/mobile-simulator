@@ -30,7 +30,11 @@ export default function Galery() {
         if (selectedImages.includes(meta.context as string)){
         setSelectedImages((prev)=>prev.filter((image)=>image!==meta.context))
         }else{
+          setTimeout(()=>{
+
             setCurrentImage(images.indexOf(meta.context as string))
+
+          })
         }
       }
     })
@@ -54,18 +58,7 @@ export default function Galery() {
 
 
 
-    if (currentImage !== null) {
-      return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <img
-          src={images[currentImage]}
-          alt={`Photo ${currentImage + 1}`}
-          className="object-cover aspect-[9/16] "
-          onClick={() => setCurrentImage(null)}
-        />
-        </div>
-      )
-      }
+
 
       function onDrop(event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault()
@@ -86,17 +79,32 @@ export default function Galery() {
       onDragOver={(event)=>event.preventDefault()}
 
       >
+
+        { currentImage !== null && (
+ <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <img
+    src={images[currentImage]}
+    alt={`Photo ${currentImage + 1}`}
+    className="object-cover aspect-[9/16] "
+    onClick={() => setCurrentImage(null)}
+ />
+ </div>
+
+
+        )}
+
+
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,261.578px))] gap-2">
           {
             images.map((image, index) => (
-              <div className="relative aspect-square" key={image}>
+              <div className="relative aspect-square" key={image}
+              {...bind(image)}     
+              >
                 <img
                   draggable="false"
                   src={image}
                   alt={`Photo ${index + 1}`}
-                  className={`w-full object-contain aspect-square`}
-                 
-                  {...bind(image)}     
+                  className={`w-full h-full pointer-events-none object-contain aspect-square`}
                 />
 
                 {
