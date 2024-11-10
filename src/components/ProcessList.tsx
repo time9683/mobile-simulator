@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import { Clock, Cpu, HardDrive } from "lucide-react"
 import useMovilStore, { Process } from "@stores/movil"
 import { formatUptime } from "@/utils"
@@ -6,7 +6,7 @@ import { formatUptime } from "@/utils"
 
 
 
-export default function ProcessList() {
+ function ProcessList() {
   const processes = useMovilStore((state) => state.process)
   const setProcesses = useMovilStore((state) => state.UpdateAllProcesses)
 
@@ -176,3 +176,5 @@ function ProcessElement({ process }: ProcessElementProps) {
   </tr>
   )
 }
+
+export default memo(ProcessList)

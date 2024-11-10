@@ -1,5 +1,6 @@
 import {Camera,Search,EllipsisVertical,MessageSquareTextIcon,MessageCircleDashed,Users2,Phone} from "lucide-react"
 import avatar from "@/assets/avatar.png"
+import { memo } from "react";
 
 
 const Contacts = [
@@ -24,8 +25,7 @@ const Contacts = [
   }
 ]
 
-
-export default function Whatsapp(){
+function Whatsapp(){
 
 
     return (
@@ -98,3 +98,5 @@ function ContantItem({name, lastMessage, avatar}: ContantItemProps){
     </li>
   )
 }
+
+export default memo(Whatsapp)

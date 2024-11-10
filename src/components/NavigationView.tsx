@@ -1,7 +1,8 @@
 import useMovilStore from "@stores/movil";
 import {X} from "lucide-react";
+import { memo } from "react";
 
-export default function NavigationView() {
+function NavigationView() {
   const process = useMovilStore((state) => state.process)
   const removeProcess = useMovilStore((state) => state.removeProcess)
   const changePage = useMovilStore((state) => state.changePage)
@@ -37,3 +38,5 @@ export default function NavigationView() {
 
 
 }
+
+export default memo(NavigationView)

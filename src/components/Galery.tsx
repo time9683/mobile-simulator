@@ -7,7 +7,7 @@ import { deleteImage, getImages,Image, saveImage } from "@/services/indexdb"
 const MemoImageVisor = memo(ImageViewer)
 const MemoImageItem = memo(ImageItem)
 
-export default function Galery() {
+function Galery() {
     const [images, setImages] = useState<Image[]>([])
     const [selectedImages, setSelectedImages] = useState<Set<number>>(new Set())
     const [currentImage, setCurrentImage] = useState<number|null>(null)
@@ -190,3 +190,6 @@ function ImageItem ({image, selected, bind}: ImageItemProps){
     </div>
   )
 }
+
+
+export default memo(Galery)

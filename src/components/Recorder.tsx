@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {Play,Trash,Check,Pause} from "lucide-react"
 import { deleteRecorderItem, getRecorderItems, saveRecorderItem } from "@/services/indexdb"
 interface RecorderItem{
@@ -20,7 +20,7 @@ const formatTime = (time:number):string=>{
 
 
 
-export default function Recorder(){
+function Recorder(){
   const [isRecording, setIsRecording] = useState(false)
   const [recorderList, setRecorderList] = useState<RecorderItem[]>([])
   const [seletedAudio,setSeletedAudio] = useState<string | null>(null)
@@ -339,3 +339,5 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
   )
 }
 
+
+export default memo(Recorder)

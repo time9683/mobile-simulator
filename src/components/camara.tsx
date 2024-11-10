@@ -1,8 +1,9 @@
 import useMovilStore from "@stores/movil"
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import {getImages, saveImage as saveDb,Image} from "@services/indexdb"
+ 
 
-export default function Camara() {
+function Camara() {
     const changePage =  useMovilStore((state) => state.changePage)
     const [image, setImage] = useState<Image|null>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
@@ -89,3 +90,5 @@ export default function Camara() {
         <canvas ref={canvasRef} className="hidden"></canvas>
     </main>
 }
+
+export default memo(Camara)

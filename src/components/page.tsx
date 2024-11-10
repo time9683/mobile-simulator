@@ -1,5 +1,5 @@
 import useMovilStore from "@stores/movil.ts"
-import { useEffect, useRef, useState,CSSProperties } from "react"
+import { useEffect, useRef, useState,CSSProperties, useMemo, memo, useCallback } from "react"
 import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
@@ -9,6 +9,34 @@ import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
 import  Whatsapp  from "@components/Whassapp"
 import NavigationView from "./NavigationView"
+
+
+const getSecondPage = (page: string) :JSX.Element | null  => {
+    const PageComponents : {[key:string]:JSX.Element} = {
+        "Navigation": <NavigationView />,
+        "chrome": <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />,
+        "netflix": <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />,
+        "spotify": <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />,
+        "amazon": <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />,
+        "youtube": <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />,
+        "galeria": <Galery />,
+        "procesos": <ProcessList />,
+        "camara": <Camara />,
+        "telefono": <Phone />,
+        "recorder": <Recorder />,
+        "whatsapp": <Whatsapp />
+    }
+    return PageComponents[page] || null
+}
+
+
+
+const width = 90
+const height = 114
+const MemoHome = memo(Home)
+const MemoBlock = memo(Block)
+const MemoIconApp = memo(IconApp)
+
 
 
 export default function Page() {
@@ -29,59 +57,11 @@ export default function Page() {
     },[currentPage])
 
 
-
-
-    let secondPage = null;
-    switch (currentPage) {
-        case "home":
-            secondPage = null;
-            break;
-        case "Navigation":
-            secondPage = <NavigationView/>
-            break;
-        case "chrome":
-            secondPage = <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />;
-            break;
-        case "netflix":
-            secondPage = <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />;
-            break;
-        case "spotify":
-            secondPage = <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />;
-            break;
-        case "amazon":
-            secondPage = <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />;
-            break;
-        case "youtube":
-            secondPage = <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />;
-            break;
-        case "galeria":
-            secondPage = <Galery />;
-            break;
-        case "procesos":
-            secondPage = <ProcessList />;
-            break;
-        case "camara":
-            secondPage = <Camara />;
-            break;
-        case "telefono":
-            secondPage = <Phone />;
-            break;
-        case "recorder":
-            secondPage = <Recorder/>
-            break;
-        case "whatsapp":
-            secondPage = <Whatsapp/>
-            break;
-        
-
-    }
+    const secondPage = useMemo(() => getSecondPage(currentPage), [currentPage])
 
     const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
     const y = IconCoordinates && typeof IconCoordinates.y === 'number' ? IconCoordinates.y : 0;
-    const width = 90
-    const height = 114
 
-    console.log(x,y,width,height)
 
     return (
         <div className="relative h-full">
@@ -99,7 +79,7 @@ export default function Page() {
               </motion.div>
             )}
           </AnimatePresence>
-          <Home/>
+            <MemoHome />
         </div>
       );
 }
@@ -115,8 +95,7 @@ function Home() {
         <main id="home" 
         style={style}
          className="flex w-full p-2 h-full bg-black">
-            <Block />
-            {/* <Block /> */}
+            <MemoBlock />
         </main>
 
     )
@@ -185,9 +164,8 @@ function Block() {
     const [apps, setApps] = useState<App[]>(APPs)
 
     const [ElementDrag, setElementDrag] = useState<HTMLElement | null>(null)
-    // drag enter for manage the drop
-    // const [ElementDrop, setElementDrop] = useState<HTMLElement | null>(null)
-    function setAppsPosition(appName: string, row: number, column: number) {
+
+    const setAppsPosition = useCallback((appName: string, row: number, column: number) => {
         setApps((apps) => {
             const newApps = [...apps];
             const existingAppIndex = newApps.findIndex(app => app.row === row && app.column === column);
@@ -209,20 +187,19 @@ function Block() {
             localStorage.setItem("apps", JSON.stringify(newApps));
             return newApps;
         });
-    }
+    }, []);
 
 
 
 
-    function handleDragStart(event: React.DragEvent<HTMLDivElement>) {
+    const handleDragStart = useCallback((event: React.DragEvent<HTMLDivElement>) => {
         setElementDrag(event.currentTarget)
-    }
+    }, []);
 
 
     useEffect(() => {
         if (ElementDrag) {
             setTimeout(()=>{
-
                 ElementDrag.style.display = "none"
             })
 
@@ -239,13 +216,14 @@ function Block() {
 
 
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ElementDrag])
 
 
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2">
         {
             apps.map((app, index) => {
-                return <IconApp 
+                return <MemoIconApp 
                 setAppsPosition={setAppsPosition}
                 key={app.name} {...app} onDragStart={handleDragStart} index={index} />
             })
@@ -270,8 +248,6 @@ function IconApp(props: IconAppProps) {
 
 
     useEffect(() => {
-        // console.log(column,row)
-        // if column and row are  not null or undefined, then set the position of the app
         if (column !== undefined || row !== undefined) return;
         const timeoutId = setTimeout(() => {
             if (ref.current) {
@@ -288,16 +264,19 @@ function IconApp(props: IconAppProps) {
 
     const style = column !== undefined && row !== undefined ? { gridColumnStart: `${column}`, gridRowStart: `${row}` } : {};
 
-    return <div
-    ref={ref}
-    onClick={() => {
+    const handleClick = useCallback(()=>{
         if(ref.current){
-        const { x, y } = ref.current.getBoundingClientRect();
-        setIconPosition(x,y)
+            const { x, y } = ref.current.getBoundingClientRect();
+            setIconPosition(x,y)
         }
         addProcess({name:props.name,urlIcon:props.urlIcon,component:()=>null})
         setPage(props.name)
-    }}
+    },[addProcess,props.name,props.urlIcon,setIconPosition,setPage])
+
+
+    return <div
+    ref={ref}
+    onClick={handleClick}
 
 
 
