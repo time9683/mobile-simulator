@@ -2,6 +2,7 @@ import { Phone, X } from 'lucide-react'
 import xd from "@/assets/xd.mp3"
 import { motion, AnimatePresence } from "framer-motion"
 import useMovilStore from '@stores/movil'
+import { useCallback } from 'react'
 
 
 interface EntryCallProps {
@@ -16,18 +17,18 @@ export default function EntryCall({IdFrom, isVisible, setIsVisible}: EntryCallPr
   const socket = useMovilStore((state) => state.socket)
   const setidFrom =  useMovilStore((state)=> state.setEntryCallId)
 
-  const handleAnswer = () => {
+  const handleAnswer = useCallback(() => {
     setIsVisible(false)
     socket?.emit("acceptCall",{targetId:IdFrom})
     setidFrom(Number(IdFrom))
     setCurrentPage("telefono")
-  }
+  },[IdFrom,setCurrentPage,setidFrom,setIsVisible,socket])
 
-  const handleReject = () => {
+  const handleReject = useCallback(() => {
     console.log('rejectCall event client send');
     socket?.emit('rejectCall',{targetId:IdFrom})
     setIsVisible(false)
-  }
+  },[IdFrom,setIsVisible,socket])
 
   return (
     <AnimatePresence>
