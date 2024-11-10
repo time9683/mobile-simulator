@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { memo, useEffect,useState,useCallback } from 'react'
 import useMovilStore from '@stores/movil'
 import OSHeader from '@components/OSHeader'
 import OSFooter from '@components/OSFooter'
@@ -8,6 +8,13 @@ import EntryCall from '@components/Entrycall'
 import { io } from 'socket.io-client'
 // get url from vite env
 const url =  import.meta.env.VITE_SOCKET_URL as string
+
+const MemoHeader = memo(OSHeader)
+const MemoFooter = memo(OSFooter)
+const MemoPage = memo(Page)
+const MemoCall  = memo(EntryCall)
+
+
 
 export default function App() {
   const [incomingCall, setIncomingCall] = useState(false)
@@ -26,6 +33,7 @@ export default function App() {
 
     const number = prompt("ingrese el numero del dispositivo a simular")
     // const randomNumber = Math.floor(Math.random() * 1000)
+    console.log("registrando el dispositivo con el numero",number)
     socketInstace.emit("register",{userId:number})
     return () => {
       socketInstace.disconnect()
@@ -48,6 +56,16 @@ export default function App() {
       }
     )
     }
+
+
+    return () => {
+      if(socket){
+        socket.off('incomingCall')
+        socket.off('CancelCall')
+      }
+    }
+
+
   },[socket])
 
 
@@ -55,13 +73,22 @@ export default function App() {
 
   useEffect(() => {
     // verifica si ya se ha guardado el tiempo de inicio
-    if (!localStorage.getItem('initTime')) {
-      setInitTime(Date.now())
-      localStorage.setItem('initTime', Date.now().toString())
+    const storedInitTime = localStorage.getItem('initTime')
+    if (!storedInitTime) {
+      const currentTime = Date.now()
+      setInitTime(currentTime)
+      localStorage.setItem('initTime', String(currentTime))
     } else {
       setInitTime(Number(localStorage.getItem('initTime')))
     }
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  const MemoizesSetIncomingCall = useCallback((value:boolean)=>{
+    setIncomingCall(value)
+  }
+  ,[setIncomingCall])
+
 
   if (!power) {
     return (
@@ -69,15 +96,19 @@ export default function App() {
           <Power />
         </div>
     )
-  }
+  } 
+
+
+
+
 
   return (
       <div className="h-dvh w-screen flex flex-col overflow-hidden relative">
-        <EntryCall IdFrom={idFrom} isVisible={incomingCall} setIsVisible={setIncomingCall} />
-        <OSHeader />
+        <MemoCall IdFrom={idFrom}  isVisible={incomingCall} setIsVisible={MemoizesSetIncomingCall} />
+        <MemoHeader />
         {/* <p> filler</p> */}
-        <Page />
-        <OSFooter />
+        <MemoPage />
+        <MemoFooter />
       </div>
   )
 }
