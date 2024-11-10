@@ -97,14 +97,14 @@ export default function Galery() {
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,261.578px))] gap-2">
           {
             images.map((image, index) => (
-              <div className="relative aspect-square" key={image}
+              <div className="relative aspect-square w-full" key={image}
               {...bind(image)}     
               >
                 <img
                   draggable="false"
                   src={image}
                   alt={`Photo ${index + 1}`}
-                  className={`w-full h-full pointer-events-none object-contain aspect-square`}
+                  className={`w-full pointer-events-none object-contain aspect-square`}
                 />
 
                 {
