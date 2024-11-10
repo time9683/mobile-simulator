@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo, memo, useCallback } from 'react';
 import Dialog from './Dialog';
 import cellularIcon from '../assets/cellular.webp';
 import noNetworkIcon from '../assets/noNetwork.webp';
@@ -24,6 +24,9 @@ interface NetworkInformation extends EventTarget {
 
 type NetworkType = 'wifi' | 'cellular';
 
+const MemoDialog = memo(Dialog)
+
+
 export default function Network() {
     const { networkStatus, setNetworkStatus } = useMovilStore()
 
@@ -31,42 +34,75 @@ export default function Network() {
 
     // Network type is hardcoded for now, as the API ain't implemented in browsers yet
     const type: NetworkType = 'wifi';
-    let icon, statusMsg, effectiveType = '';
 
     // If there's a connection, then show the appropriate icon
+    const {icon,statusMsg} = useMemo(()=>{
     if (networkStatus === 'connected') {
         if (type === 'wifi') {
-            icon = wifiIcon
-            statusMsg = 'Conectado a la red Wi-Fi'
+            return {icon:wifiIcon,statusMsg:'Conectado a la red Wi-Fi'}
         } else {
-            icon = cellularIcon
-            effectiveType = (navigator as NavigatorNetworkInformation).connection?.effectiveType ?? ''
-            statusMsg = `Conectado a la red celular ${effectiveType}`
+            const effectiveType = (navigator as NavigatorNetworkInformation).connection?.effectiveType ?? ''
+            return {icon:cellularIcon,statusMsg:`Conectado a la red celular (${effectiveType})`}
         }
     } else {
-        icon = noNetworkIcon
-        statusMsg = 'Sin conexión'
+        return {icon:noNetworkIcon,statusMsg:'Sin conexión a la red'}
     }
+    }
+    ,[networkStatus,type])
 
-    // Figure out the network status and update it every second
+    // figure out the network status
     useEffect(() => {
-        const interval = setInterval(() => {
-            // If there's no rtt, then there's no connection
-            setNetworkStatus((navigator as NavigatorNetworkInformation).connection?.rtt === 0 ? 'disconnected' : 'connected')
-        }, 1000)
-        return () => clearInterval(interval);
-    }, [])
+        const connection = (navigator as NavigatorNetworkInformation).connection
+        const updateNetworkStatus = () => {
+            console.log("Network status updated")
+            if (navigator.onLine) {
+                setNetworkStatus('connected')
+            } else {
+                setNetworkStatus('disconnected')
+            }
+        }
+
+        if (connection){
+            window.addEventListener('online', updateNetworkStatus)
+            window.addEventListener('offline', updateNetworkStatus)
+            updateNetworkStatus()
+        }else{
+            const interval = setInterval(updateNetworkStatus, 1000)
+            return () => clearInterval(interval)
+        }
+
+        return () => {
+            if(connection){
+            window.removeEventListener('online', updateNetworkStatus)
+            window.removeEventListener('offline', updateNetworkStatus)
+            }
+        }
+
+    }, [setNetworkStatus])
+
+    
+    const OpenModal =  useCallback(() => {
+        ref.current?.showModal();
+    }
+    ,[ref])
+
+    const CloseModal = useCallback(() => {
+        ref.current?.close();
+    } ,[ref])
+
+
+
 
     return (
         <>
-            <button onClick={() => {
-                ref.current?.showModal();
-            }}>
+            <button onClick={OpenModal}>
                 <img src={icon} width='20' alt='Network'/>
             </button>
-            <Dialog someRef={ref} onClick={() => ref.current?.close()}>
-                <p> {statusMsg} </p>
-            </Dialog>
+            <MemoDialog someRef={ref}
+                onClick={CloseModal}
+            >
+                <p>{statusMsg}</p>
+            </MemoDialog>
         </>
     )
 }

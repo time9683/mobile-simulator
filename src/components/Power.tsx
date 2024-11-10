@@ -7,7 +7,8 @@ import Button from './Button';
 
 export default function Power() {
     const ref = useRef<HTMLDialogElement>(null);
-    const { power, setPower } = useMovilStore()
+    const  power = useMovilStore(state => state.power)
+    const setPower = useMovilStore(state => state.setPower)
 
     if (!power) {
         return (
