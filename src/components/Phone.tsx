@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo, memo } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Mic, Phone, PhoneOff, Volume2, Keyboard, Users, UserPlus} from 'lucide-react'
@@ -11,7 +11,7 @@ import SimplePeer from 'simple-peer'
 
 
 
-export default function Component() {
+const Component = () => {
   const setIdfrom = useMovilStore((state) => state.setEntryCallId)
   const idFrom = useMovilStore((state)=> state.EntryCallId)
 
@@ -33,6 +33,42 @@ export default function Component() {
   const tonoAudio = useRef(new Audio(tono))
 
   const socket = useMovilStore((state) => state.socket)
+
+
+  const handleRejectCall = useCallback(() => {
+    console.log('rejectCall event');
+    setInCall(false);
+    setValidated(false);
+    setCallDuration(0);
+    setIdfrom(null);
+    peer.current?.destroy();
+    peer.current = null;
+    tonoAudio.current.pause()
+  }, [setIdfrom]);
+
+  const handleCancelCall = useCallback(() => {
+    console.log('CancelCall event');
+    setInCall(false);
+    setValidated(false);
+    setIdfrom(null);
+    setCallDuration(0);
+    peer.current?.destroy();
+    peer.current = null;
+  }, [setIdfrom]);
+
+  const handleAcceptCall = useCallback(async () => {
+    // desactivar sonido de tono
+    tonoAudio.current.pause()
+    setValidated(true);
+  }, []);
+
+  const handleSignal = useCallback(({ signal }:{signal:string}) => {
+    console.log("socket signal event");
+    if (peer.current) {
+      console.log('signal event');
+      peer.current.signal(signal);
+    }
+  }, []);
 
   const createPeer = useCallback(async (number: string, initiator: boolean) => {
     if (!localAudioRef.current){
@@ -94,42 +130,9 @@ export default function Component() {
         peer.current?.destroy();
       }
     }
-  }, [socket, peer]);
+  }, [socket, peer, handleRejectCall, handleCancelCall, handleAcceptCall, handleSignal]);
 
-  const handleRejectCall = () => {
-    console.log('rejectCall event');
-    setInCall(false);
-    setValidated(false);
-    setCallDuration(0);
-    setIdfrom(null);
-    peer.current?.destroy();
-    peer.current = null;
-    tonoAudio.current.pause()
-  };
 
-  const handleCancelCall = () => {
-    console.log('CancelCall event');
-    setInCall(false);
-    setValidated(false);
-    setIdfrom(null);
-    setCallDuration(0);
-    peer.current?.destroy();
-    peer.current = null;
-  };
-
-  const handleAcceptCall = async () => {
-    // desactivar sonido de tono
-    tonoAudio.current.pause()
-    setValidated(true);
-  };
-
-  const handleSignal = ({ signal }:{signal:string}) => {
-    console.log("socket signal event");
-    if (peer.current) {
-      console.log('signal event');
-      peer.current.signal(signal);
-    }
-  };
 
   useEffect(() => {
     if (idFrom !== null && !peer.current ) {
@@ -159,16 +162,16 @@ export default function Component() {
     }
   }, [audio]);
 
-  const addDigit = (digit: string) => {
+  const addDigit = useCallback((digit: string) => {
     setNumber(prev => (prev + digit).slice(-20));
     playDialSound();
-  };
+  }, [playDialSound]);
 
-  const deleteDigit = () => {
+  const deleteDigit = useCallback(() => {
     setNumber(prev => prev.slice(0, -1));
-  };
+  }, []);
 
-  const startCall = async () => {
+  const startCall = useCallback(async () => {
     if (number.length > 0) {
       if (number === null) return;
       console.log("creating peer");
@@ -178,9 +181,9 @@ export default function Component() {
       tonoAudio.current.play()
       socket?.emit('call', { targetId: number });
     }
-  };
+  }, [createPeer, number, socket]);
 
-  const endCall = () => {
+  const endCall = useCallback(() => {
     setInCall(false);
     setValidated(false);
     setCallDuration(0);
@@ -189,7 +192,7 @@ export default function Component() {
     setIdfrom(null);
     tonoAudio.current.pause()
     socket?.emit('CancelCall', { targetId: number });
-  };
+  }, [setIdfrom, socket, number]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -201,18 +204,54 @@ export default function Component() {
     return () => clearInterval(interval);
   }, [inCall, validated]);
 
-  const formatDuration = (seconds: number) => {
+  const formatDuration = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  }, []);
 
-  const dialPad = [
+  const dialPad = useMemo(() => [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
     ['*', '0', '#']
-  ];
+  ], []);
+
+
+const handleShowModalContacs = useCallback(() => {
+  contactsRef.current?.showModal();
+} ,[contactsRef])
+
+const handleShowModalAdd = useCallback(() => {
+  addContactRef.current?.showModal();
+},
+[addContactRef])
+
+
+const handleHideModalContatcs = useCallback(() => {
+  contactsRef.current?.close();
+}
+,[contactsRef])
+
+const handleHideModalAdd = useCallback(() => {
+  addContactRef.current?.close();
+}
+,[addContactRef])
+
+const handleAddContact = useCallback( async () => {
+   saveContact({name: newContactName, number: number})
+   handleHideModalAdd()
+}
+,[newContactName,number,handleHideModalAdd])
+
+const handleAddDigit = useCallback((digit: string) => {
+  addDigit(digit)
+}
+,[addDigit])
+
+
+
+
 
   if (inCall) {
     return (
@@ -260,7 +299,7 @@ export default function Component() {
           variant="outline"
           size="sm"
           className="mt-4"
-          onClick={() => addContactRef.current?.showModal()}
+          onClick={handleShowModalAdd}
         >
           <UserPlus className="h-4 w-4 mr-2" />
           Añadir Contacto
@@ -270,7 +309,7 @@ export default function Component() {
       <Dialog someRef={addContactRef}>
         <div className='flex justify-between'>
           <p className='font-bold'> Nuevo contacto </p>
-          <button onClick={() => {addContactRef.current?.close()}}>
+          <button onClick={handleHideModalAdd}>
             <p className='font-light text-sm' > x </p>
           </button>
         </div>
@@ -281,19 +320,19 @@ export default function Component() {
             onChange={(e) => setNewContactName(e.target.value)}
           />
           <div>Número: {number}</div>
-          <Button onClick={async () => {await saveContact({name: newContactName, number: number})}}>Añadir Contacto</Button>
+          <Button onClick={handleAddContact}>Añadir Contacto</Button>
         </div>
       </Dialog>
       
       <div className="grid grid-cols-3 gap-4 w-full max-w-xs">
-        {dialPad.map((row, rowIndex) => (
-          row.map((digit, colIndex) => (
+        {dialPad.map((row) => (
+          row.map((digit) => (
             <Button
-              key={`${rowIndex}-${colIndex}`}
+              key={digit}
               variant="ghost"
               size="lg"
               className="aspect-square text-2xl font-light"
-              onClick={() => addDigit(digit)}
+              onClick={() => handleAddDigit(digit)}
             >
               {digit}
             </Button>
@@ -316,7 +355,7 @@ export default function Component() {
           <Phone className="h-6 w-6" />
         </Button>
         <Button variant="ghost" size="lg" className="aspect-square" onClick={async () => {
-          contactsRef.current?.showModal()
+          handleShowModalContacs()
           setContacts(await getContacts())
           console.log(contacts)
         }}>
@@ -325,7 +364,7 @@ export default function Component() {
         <Dialog someRef={contactsRef}>
           <div className='flex justify-between min-w-40'>
             <p className='font-bold'> Contactos </p>
-            <button onClick={() => {contactsRef.current?.close()}}>
+            <button onClick={handleHideModalContatcs}>
               <p className='font-light text-sm' > x </p>
             </button>
           </div>
@@ -334,7 +373,7 @@ export default function Component() {
               <div key={index} className="flex justify-between items-center" onClick={() => {
                 setNumber(contact.number)
                 startCall()
-                contactsRef.current?.close()
+                handleHideModalContatcs()
               }}>
                 <span>{contact.name}</span>
                 <span>{contact.number}</span>
@@ -346,3 +385,5 @@ export default function Component() {
     </div>
   )
 }
+
+export default memo(Component);
