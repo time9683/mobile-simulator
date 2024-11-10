@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {Play,Trash,Check,Pause} from "lucide-react"
 import { deleteRecorderItem, getRecorderItems, saveRecorderItem } from "@/services/indexdb"
 interface RecorderItem{
@@ -50,6 +50,7 @@ export default function Recorder(){
     
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[seletedAudio])
 
 
@@ -131,14 +132,6 @@ export default function Recorder(){
     }
       })
 
-
-
-
-
-
-
-
-
       return ()=>clearInterval(interval)
     }else{
       setTime(0)
@@ -146,71 +139,59 @@ export default function Recorder(){
   },[isRecording])
 
 
-  const handleDelete = (id:string) => {
+  const handleDelete = useCallback( (id:string) => {
     deleteRecorderItem(id)
     setRecorderList((prev)=>prev.filter((item)=>item.id !== id))
+  },[])
+
+
+
+
+  const handleToggle = useCallback(()=>{
+    if(isPlaying){
+      audio.current?.pause()
+      setIsPlaying(false)
+    }else{
+      audio.current?.play()
+      setIsPlaying(true)
+    }
   }
+  ,[isPlaying])
 
 
+  const handleToggleRecording = useCallback(()=>{
+    mediaRef.current?.stop()
+    setIsRecording((prev)=>!prev)
+  } ,[])
 
-  let toRender = null
+  const seletedA = useCallback((id:string)=>{
+    setSeletedAudio(id)
+  },[])
 
-  if (!isRecording){
-    toRender =   <ul className="flex flex-col gap-4 p-4">
-      {recorderList.map((item,index)=>(
-        <RecorderItem key={index} time={item.time} id={item.id} seleted={seletedAudio === item.id}
-        duration={item.duration}
-        audio={audio.current}
-        isPlaying={isPlaying}
-        setIem={(item)=>setSeletedAudio(item)}
-        setPause={()=>{
-          if(isPlaying){
-            audio.current?.pause()
-            setIsPlaying(false)
-          }else{
-            audio.current?.play()
-            setIsPlaying(true)
-          }
-        }}
-        handleDelete={handleDelete}
-        />
-      ))}
-  
-    </ul>
-  }
-  
-  if (isRecording){
-    // si esta grabando mo strar el tiempo de grabacion
-    toRender = (  
-      // show time
-      <div className="flex flex-col items-center gap-4 p-4">
-        <span className="text-white text-4xl">{formatTime(timeRecord)}</span>
-      </div>
-
-    )
-
-  }
 
 
 
 return (<section className={`w-full h-full relative bg-[#111] overflow-x-auto ${isRecording ? "flex flex-col justify-center items-center" : ""} `}>
-
-
-  {toRender}
-
-  {/* button with rounded color red and white inner */}
-
-
-{/* button with rounded color red and white inner */}
-  <button 
-  onClick={
-    ()=>{
-      if(isRecording){
-      mediaRef.current?.stop()
-      }
-      setIsRecording(!isRecording)
-    }
+  {isRecording ? <TimeIndicator time={timeRecord}/> : 
+   <ul className="flex flex-col gap-4 p-4">
+   {recorderList.map((item,index)=>(
+     <RecorderItem key={index} time={item.time} id={item.id} seleted={seletedAudio === item.id}
+     duration={item.duration}
+     audio={audio.current}
+     isPlaying={isPlaying}
+     setIem={seletedA}
+     setPause={handleToggle}
+     handleDelete={handleDelete}
+      />
+    ))}
+  </ul>
   }
+
+
+
+
+  <button 
+  onClick={handleToggleRecording}
   className="rounded-full bg-red-500 w-12 h-12 flex justify-center items-center active:scale-75 transition-transform fixed bottom-20 left-0 right-0 m-auto">
    { 
     !isRecording ?
@@ -224,6 +205,25 @@ return (<section className={`w-full h-full relative bg-[#111] overflow-x-auto ${
 
 </section>)
 }
+
+
+
+function TimeIndicator({time}:{time:number}){
+  return (
+    <div className="flex flex-col items-center gap-4 p-4">
+      <span className="text-white text-4xl">{formatTime(time)}</span>
+    </div>
+  )
+}
+
+
+
+
+
+
+
+
+
 
 interface RecorderItemProps {
   time:number,
@@ -243,34 +243,56 @@ const format  = new Intl.DateTimeFormat('default', { day: '2-digit', month: 'sho
 // element of the list of the recorder
 function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,handleDelete,time}:RecorderItemProps){
     const [currentTime,setCurrentTime] = useState(0)
-    // const [duration,setDuration] = useState(0)
 
     useEffect(()=>{
-
-      // console.log(duration)
       if(audio !== null && seleted){
-
         audio.addEventListener('timeupdate',()=>{
           setCurrentTime((audio.currentTime))
         })
-  
       }
     },[audio,seleted])
 
-    const witdh = currentTime/duration
+    const witdh = useMemo(()=>{
+      return currentTime / duration
+    },[currentTime,duration])
+
+    const seletedA = useCallback(()=>{
+      setIem(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } ,[])
+
+    const Delete = useCallback(()=>{
+      handleDelete(id)
+    } , [handleDelete,id])
+
+
+    const handlePause = useCallback(()=>{
+      if(audio !== null){
+        audio.pause()
+        setPause()
+      }
+    }
+    ,[audio,setPause])
+
+    const durationFormat = useMemo(()=>{
+      return duration ? formatTime(duration) : "00:00:00"
+    }
+    ,[duration])
+
+    const currentTimeFormat = useMemo(()=>{
+      return formatTime(Math.floor(currentTime))
+    }
+    ,[currentTime])
+
 
   return (
     <li className="flex  flex-col gap-4  text-white p-6 bg-neutral-800 rounded-xl"
-    onClick={()=>{
-      setIem(id)
-    }}
+    onClick={seletedA}
     >
 
       <div className="flex flex-row items-center gap-4">
         <div className="bg-zinc-700  p-3 rounded-full"
-        onClick={()=>{
-          setPause()
-        }}
+        onClick={handlePause}
         >
         
         {  
@@ -285,17 +307,15 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
             <span className="font-bold text-xl">{id}</span>
             <p className="font-bold text-xl">{format.format(time)}</p>
             <button className="ml-auto"
-            onClick={()=>{
-              handleDelete(id)
-            }}
+            onClick={Delete}
             >
             <Trash />
             </button>
           </div>
           <span className="text-neutral-400 text-sm">
             
-            { seleted ?? currentTime ? formatTime(Math.floor(currentTime)) : "00:00"}
-             {seleted ? <span className="text-green-400">/{duration ?  formatTime(duration) : "00:00:00"}</span> : null} </span>
+            { seleted ? <span className="text-green-400">{currentTimeFormat}</span> : null} /
+            <span className="text-green-400">/{durationFormat}</span> </span>
         </div>
 
     {/* bar progress red */}
