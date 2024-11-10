@@ -1,15 +1,16 @@
 import useMovilStore from "@stores/movil"
 import { useEffect, useRef, useState } from "react"
-import {getImages, saveImage as saveDb} from "@services/indexdb"
+import {getImages, saveImage as saveDb,Image} from "@services/indexdb"
 
 export default function Camara() {
     const changePage =  useMovilStore((state) => state.changePage)
-    const [image, setImage] = useState<string | null>(null)
+    const [image, setImage] = useState<Image|null>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const streamRef = useRef<MediaStream|null>(null)
 
     useEffect(() => {
-        let streamRef: MediaStream | null = null
+        streamRef.current = null
 
         async function setLatImage() {
             const images = await getImages()
@@ -23,15 +24,18 @@ export default function Camara() {
         if (videoRef.current) {
             navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
                 videoRef.current!.srcObject = stream
-                streamRef = stream
-            })
+                streamRef.current = stream
+            }).catch((error) => {
+                console.error(error)
+            }
+            )
         }
         setLatImage()
        
         return () => {
-            if (streamRef) {
+            if (streamRef.current) {
                 console.log("stop")
-                streamRef.getTracks().forEach((track) => {
+                streamRef.current.getTracks().forEach((track) => {
                     track.stop()
                 })
             }
@@ -52,7 +56,7 @@ export default function Camara() {
             context?.drawImage(videoRef.current, 0, 0)
             const data = canvasRef.current.toDataURL("image/png")
             // create blob url to preview image
-            setImage(data)
+            setImage({image:data, id:Date.now()})
             // save image
              saveDb(data)
         }
@@ -75,7 +79,7 @@ export default function Camara() {
       className="
       bg-white rounded h-14 aspect-square absolute left-4">
         {/* show the image if is difent of null */}
-        {image && <img src={image} className="w-full h-full object-cover" />}
+        {image && <img src={image.image} className="w-full h-full object-cover" />}
       </button>
         <button onClick={saveImage}
         className="w-16 h-16 bg-white rounded-full"
