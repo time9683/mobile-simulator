@@ -92,7 +92,7 @@ export default function App() {
 
   if (!power) {
     return (
-        <div className='bg-slate-800 h-screen flex items-center justify-center'>
+        <div className='bg-slate-150 h-screen flex items-center justify-center'>
           <Power />
         </div>
     )

@@ -13,7 +13,7 @@ export default function Power() {
     if (!power) {
         return (
             <button onClick={() => setPower(true)}>
-                <img src={whitePowerIcon} width='20' alt='Power'/>
+                <img src={powerIcon} width='20' alt='Power'/>
             </button>
         )
     }
@@ -23,23 +23,23 @@ export default function Power() {
             <button onClick={() => {
                 ref.current?.showModal();
             }}>
-                <img src={powerIcon} width='20' alt='Power'/>
+                <img src={whitePowerIcon} width='20' alt='Power'/>
             </button>
             <Dialog someRef={ref}>
                 <p> ¿Desea apagar el dispositivo? </p>
-                <div>
+                <div className='flex justify-center'>
                     <Button onClick={() => ref.current?.close()}
-                        className='bg-blue-500 border-blue-700 hover:bg-blue-400 hover:border-blue-500'
+                        className='bg-red-500 border-red-700 hover:bg-red-400 hover:border-red-500'
                     >
-                        Cancelar
+                        No
                     </Button>
                     <Button onClick={() => {
                             ref.current?.close()
                             setPower(false)
                         }}
-                        className='bg-red-500 border-red-700 hover:bg-red-400 hover:border-red-500'
+                        className='bg-green-500 border-green-700 hover:bg-green-400 hover:border-green-500 ml-2'
                     >
-                        Apagar
+                        Sí
                     </Button>
                 </div>
             </Dialog>

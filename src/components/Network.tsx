@@ -1,8 +1,8 @@
 import { useRef, useEffect, useMemo, memo, useCallback } from 'react';
 import Dialog from './Dialog';
-import cellularIcon from '../assets/cellular.webp';
-import noNetworkIcon from '../assets/noNetwork.webp';
-import wifiIcon from '../assets/wifi.webp';
+import cellularIcon from '../assets/white-cellular.webp';
+import noNetworkIcon from '../assets/no-network-alt.webp';
+import wifiIcon from '../assets/white-wifi.webp';
 import useMovilStore from '@stores/movil';
 
 // Appending the navigator.connection interface (Thanks TS!)
@@ -33,7 +33,7 @@ export default function Network() {
     const ref = useRef<HTMLDialogElement>(null);
 
     // Network type is hardcoded for now, as the API ain't implemented in browsers yet
-    const type: NetworkType = 'wifi';
+    const type: NetworkType = 'cellular';
 
     // If there's a connection, then show the appropriate icon
     const {icon,statusMsg} = useMemo(()=>{
@@ -96,7 +96,8 @@ export default function Network() {
     return (
         <>
             <button onClick={OpenModal}>
-                <img src={icon} width='20' alt='Network'/>
+                <img src={icon}
+                    className={type === 'cellular' || networkStatus !== 'connected' ? 'p-0.5 w-6' : 'w-7'} alt='Network'/>
             </button>
             <MemoDialog someRef={ref}
                 onClick={CloseModal}

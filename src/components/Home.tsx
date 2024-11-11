@@ -1,4 +1,4 @@
-import homeIcon from '../assets/home.png';
+import homeIcon from '../assets/white-home.webp';
 import useMovilStore from '@stores/movil';
 
 export default function Home() {

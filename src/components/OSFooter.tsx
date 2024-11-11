@@ -8,9 +8,9 @@ export default function OSFooter () {
 
 
     return (
-        <footer className="bg-slate-50 flex items-center justify-center z-10 gap-3">
+        <footer className="bg-slate-950 flex items-center justify-center z-10 gap-3">
             <button onClick={() => setCurrentPage('Navigation')}>
-            <Square size={20} className="m-1" />
+            <Square size={20} className="m-1" color='white'/>
             </button>
 
             <Home />
