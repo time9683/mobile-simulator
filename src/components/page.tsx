@@ -1,5 +1,5 @@
 import useMovilStore from "@stores/movil.ts"
-import { useEffect, useRef, useState,CSSProperties, useMemo, memo, useCallback } from "react"
+import { useEffect, useRef, useState, CSSProperties, useMemo, memo, useCallback } from "react"
 import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
@@ -7,24 +7,24 @@ import Camara from "@components/camara"
 import { motion, AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
-import  Whatsapp  from "@components/Whassapp"
+import Whatsapp from "@components/Whassapp"
 import NavigationView from "./NavigationView"
 
 
-const getSecondPage = (page: string) :JSX.Element | null  => {
-    const PageComponents : {[key:string]:JSX.Element} = {
+const getSecondPage = (page: string): JSX.Element | null => {
+    const PageComponents: { [key: string]: JSX.Element } = {
         "Navigation": <NavigationView />,
-        "chrome": <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />,
-        "netflix": <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />,
-        "spotify": <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />,
-        "amazon": <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />,
-        "youtube": <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />,
-        "galeria": <Galery />,
-        "procesos": <ProcessList />,
-        "camara": <Camara />,
-        "telefono": <Phone />,
-        "recorder": <Recorder />,
-        "whatsapp": <Whatsapp />
+        "Chrome": <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />,
+        "Netflix": <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />,
+        "Spotify": <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />,
+        "Amazon": <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />,
+        "Youtube": <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />,
+        "Galeria": <Galery />,
+        "Procesos": <ProcessList />,
+        "Camara": <Camara />,
+        "Telefono": <Phone />,
+        "Recorder": <Recorder />,
+        "Whatsapp": <Whatsapp />
     }
     return PageComponents[page] || null
 }
@@ -41,20 +41,20 @@ const MemoIconApp = memo(IconApp)
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
-    const IconCoordinates = useMovilStore((state)=> state.IconAppCoordintes)
-    const [isVisible,setIsVisible] = useState(false)
+    const IconCoordinates = useMovilStore((state) => state.IconAppCoordintes)
+    const [isVisible, setIsVisible] = useState(false)
 
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        if(currentPage !== "home"){
+        if (currentPage !== "home") {
             setIsVisible(true)
-        }else{
+        } else {
             setIsVisible(false)
         }
 
 
-    },[currentPage])
+    }, [currentPage])
 
 
     const secondPage = useMemo(() => getSecondPage(currentPage), [currentPage])
@@ -65,36 +65,35 @@ export default function Page() {
 
     return (
         <div className="relative h-full">
-          <AnimatePresence>
-            {isVisible && (
-              <motion.div
-                key="page"
-                initial={{ opacity: 0, scale: 0.5, x, y, width, height }}
-                animate={{ opacity: 1, scale: 1, x: 0, y: 0, width: "100%", height: "100%" }}
-                exit={{ opacity: 0, scale: 0.5, x, y, width, height }}
-                transition={{ duration: 0.5 }}
-                className={`absolute top-0 left-0 w-full h-full z-10 bg-black bg-opacity-50`}
-              >
-                {secondPage}
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <AnimatePresence>
+                {isVisible && (
+                    <motion.div
+                        key="page"
+                        initial={{ opacity: 0, scale: 0.5, x, y, width, height }}
+                        animate={{ opacity: 1, scale: 1, x: 0, y: 0, width: "100%", height: "100%" }}
+                        exit={{ opacity: 0, scale: 0.5, x, y, width, height }}
+                        transition={{ duration: 0.5 }}
+                        className={`absolute top-0 left-0 w-full h-full z-10 bg-black bg-opacity-50`}
+                    >
+                        {secondPage}
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <MemoHome />
         </div>
-      );
+    );
 }
 
 
 function Home() {
-    // create a css property called --bg-wallpaper
     const style: CSSProperties & { [key: string]: string } = {
         // "--bg-wallpaper": "url(https://img.asmedia.epimg.net/resizer/v2/NZTAJMVYTVHDJMOWYTEK3KKE6U.webp?auth=058fa8d2b79580189b58fd9d21735ad0c0d746352ae3bbc18185b915535e01c3&width=1472&height=1104&smart=true)"
     }
 
     return (
-        <main id="home" 
-        style={style}
-         className="flex w-full p-2 h-full bg-black">
+        <main id="home"
+            style={style}
+            className="flex w-full p-2 h-full bg-black">
             <MemoBlock />
         </main>
 
@@ -105,55 +104,54 @@ function Home() {
 interface App {
     name: string
     urlIcon: string
-    column?: number 
-    row?: number 
+    column?: number
+    row?: number
 }
-// whatsapp, facebook, instagram, twitter, youtube, tiktok, netflix, spotify, amazon, linkedin
 const APPs: App[] = [
     {
-        name: "whatsapp",
+        name: "Whatsapp",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/733/733585.png"
     },
     {
-        name: "chrome",
+        name: "Chrome",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732200.png"
     },
     {
-        name: "netflix",
+        name: "Netflix",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/870/870910.png"
     },
     {
-        name: "spotify",
+        name: "Spotify",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/174/174872.png"
     },
     {
-        name: "amazon",
+        name: "Amazon",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732217.png"
     },
     {
-        name: "youtube",
+        name: "Youtube",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
     },
     {
-        "name":"galeria",
-        "urlIcon":"https://static.vecteezy.com/system/resources/previews/042/712/634/non_2x/google-gallery-icon-logo-symbol-free-png.png"
+        "name": "Galeria",
+        "urlIcon": "https://static.vecteezy.com/system/resources/previews/042/712/634/non_2x/google-gallery-icon-logo-symbol-free-png.png"
     },
     {
-        name:"procesos",
-        urlIcon:"https://cdn-icons-png.flaticon.com/512/10239/10239999.png"
+        name: "Procesos",
+        urlIcon: "https://cdn-icons-png.flaticon.com/512/10239/10239999.png"
     },
     {
-        name: "camara",
+        name: "Camara",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/1373/1373061.png"
-        
+
     },
     {
-        name: "telefono",
+        name: "Telefono",
         urlIcon: "https://cdn.iconscout.com/icon/free/png-256/free-apple-phone-icon-download-in-svg-png-gif-file-formats--logo-call-apps-pack-user-interface-icons-493154.png?f=webp&w=256"
     },
     {
-        name:"recorder",
-        urlIcon:"https://cdn-icons-png.flaticon.com/512/3817/3817556.png"
+        name: "Recorder",
+        urlIcon: "https://cdn-icons-png.flaticon.com/512/3817/3817556.png"
     }
 ]
 
@@ -199,7 +197,7 @@ function Block() {
 
     useEffect(() => {
         if (ElementDrag) {
-            setTimeout(()=>{
+            setTimeout(() => {
                 ElementDrag.style.display = "none"
             })
 
@@ -226,18 +224,18 @@ function Block() {
 
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ElementDrag])
 
 
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2">
         {
             apps.map((app, index) => {
-                return <MemoIconApp 
-                setAppsPosition={setAppsPosition}
-                key={app.name} {...app} onDragStart={handleDragStart} index={index} />
+                return <MemoIconApp
+                    setAppsPosition={setAppsPosition}
+                    key={app.name} {...app} onDragStart={handleDragStart} index={index} />
             })
-           
+
         }
     </section>
 }
@@ -269,34 +267,34 @@ function IconApp(props: IconAppProps) {
         }, 100);
 
         return () => clearTimeout(timeoutId);
-    }, [ref,column,row,props]);
+    }, [ref, column, row, props]);
 
 
     const style = column !== undefined && row !== undefined ? { gridColumnStart: `${column}`, gridRowStart: `${row}` } : {};
 
-    const handleClick = useCallback(()=>{
-        if(ref.current){
+    const handleClick = useCallback(() => {
+        if (ref.current) {
             const { x, y } = ref.current.getBoundingClientRect();
-            setIconPosition(x,y)
+            setIconPosition(x, y)
         }
-        addProcess({name:props.name,urlIcon:props.urlIcon,component:()=>null})
+        addProcess({ name: props.name, urlIcon: props.urlIcon, component: () => null })
         setPage(props.name)
-    },[addProcess,props.name,props.urlIcon,setIconPosition,setPage])
+    }, [addProcess, props.name, props.urlIcon, setIconPosition, setPage])
 
 
     return <div
-    ref={ref}
-    onClick={handleClick}
+        ref={ref}
+        onClick={handleClick}
 
 
 
-    onDragStart={(event)=>{
-        console.log("drag",props.index)
-        props.onDragStart(event)
-    }
-    }  draggable="true"
-    style={style}    
-    className={` w-[90px] aspect-square rounded flex flex-col items-center justify-center`}
+        onDragStart={(event) => {
+            //  console.log("drag", props.index)
+            props.onDragStart(event)
+        }
+        } draggable="true"
+        style={style}
+        className={` w-[90px] aspect-square rounded flex flex-col items-center justify-center`}
     >
         <img src={props.urlIcon} alt={props.name} className="w-2/3  object-contain " />
         <p className="text-center text-white">{props.name}</p>
