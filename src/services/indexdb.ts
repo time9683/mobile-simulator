@@ -18,6 +18,11 @@ interface RecorderItem{
 }
 
 
+export interface Image {
+    image: string
+    id: number
+}
+
 function openDB() {
     const rq = indexedDB.open(DB_NAME, 1)
 
@@ -62,7 +67,7 @@ export function saveRecorderItem(item: RecorderItem) {
     }
 }
 
-export  function getImages(): Promise<string[]> {
+export  function getImages(): Promise<Image[]> {
     return new Promise((resolve) => {
         const db = openDB()
             db.onsuccess = () => {
@@ -70,7 +75,7 @@ export  function getImages(): Promise<string[]> {
                 const store = tx.objectStore(KEY_IMAGES)
                 const rq = store.getAll()
                 rq.onsuccess = () => {
-                    resolve(rq.result.map((item: {image:string}) => item.image))
+                    resolve(rq.result)
                 }
             }
     })

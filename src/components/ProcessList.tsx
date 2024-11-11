@@ -1,54 +1,43 @@
-"use client"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import { Clock, Cpu, HardDrive } from "lucide-react"
-import useMovilStore from "@stores/movil"
+import useMovilStore, { Process } from "@stores/movil"
 import { formatUptime } from "@/utils"
 
-interface Process {
-  pid: number
-  user: string
-  priority: number
-  cpu: number
-  memory: number
-  time: string
-  command: string
-}
 
 
 
-export default function ProcessList() {
-  const [processes, setProcesses] = useState<Process[]>([
-    { pid: 1, user: "root", priority: 20, cpu: 0.1, memory: 0.1, time: "0:32.28", command: "/sbin/init" },
-    { pid: 3195, user: "time", priority: 20, cpu: 4.2, memory: 2.1, time: "9:03.00", command: "Chrome" },
-    { pid: 3203, user: "time", priority: 20, cpu: 4.2, memory: 2.0, time: "0:00.00", command: "Galeria" },
-    { pid: 3209, user: "time", priority: 20, cpu: 4.2, memory: 2.1, time: "0:00.00", command: "netflix" },
-    { pid: 3210, user: "time", priority: 20, cpu: 4.2, memory: 2.0, time: "0:00.16", command: "whatsapp" },
-  ])
+ function ProcessList() {
+  const processes = useMovilStore((state) => state.process)
+  const setProcesses = useMovilStore((state) => state.UpdateAllProcesses)
+
   const initTime = useMovilStore((state)=> state.initTime)
 
   const [systemInfo, setSystemInfo] = useState({
     cpuUsage: 67,
-    memoryUsage: 69,
+    memoryUsage: processes.reduce((acc, process) => acc + process.memory, 0),
     uptime:  Math.floor((Date.now() - initTime) / 1000),
     loadAverage: [0.5, 1.88, 1.88],
-    tasks: { total: 5 , running: 1, sleeping: 4 }
+    tasks:  { total: processes.length, running: processes.filter(process => process.cpu > 0).length, sleeping: processes.filter(process => process.cpu === 0).length }
   })
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProcesses(prev => prev.map(process => ({
+      const newProcesses = processes.map(process => ({
         ...process,
         cpu: Number((Math.random() * 5).toFixed(1)),
-        memory: Number((Math.random() * 3).toFixed(1))
-      })))
+        memory: process.name.toLowerCase().includes("chrome") ? Number((Math.random() * 20).toFixed(1)) : Number((Math.random() * 3).toFixed(1))
+      }))
+      setProcesses(newProcesses)
+
+      // the memory usage base on the processes memory usage
+      const memoryUsage = newProcesses.reduce((acc, process) => acc + process.memory, 0)
 
       setSystemInfo({
         cpuUsage: Number((Math.random() * 100).toFixed(1)),
-        memoryUsage: systemInfo.memoryUsage,
+        memoryUsage: memoryUsage,
         uptime: Math.floor((Date.now() - initTime) / 1000),
         loadAverage: [Math.random() * 2, Math.random() * 2, Math.random() * 2],
-        tasks: { total: 5 , running: 1, sleeping: 4 }
+        tasks: { total: newProcesses.length, running: newProcesses.filter(process => process.cpu > 0).length, sleeping: newProcesses.filter(process => process.cpu === 0).length }
       })
 
 
@@ -95,7 +84,7 @@ export default function ProcessList() {
               ></div>
             </div>
             <div className="text-xs text-gray-400">
-              {systemInfo.memoryUsage}% used
+              {systemInfo.memoryUsage.toFixed(2)}% used
             </div>
           </div>
         </div>
@@ -126,38 +115,19 @@ export default function ProcessList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
+          <ProcessElement key={process.pid} process={{
+            pid: 1,
+            user: "root",
+            priority: 20,
+            cpu: 1,
+            memory: 0.1,
+            time: "0:00.00",
+            name: "init",
+            urlIcon: "",
+            component: () => { return <></> }
+          }} />
             {processes.map((process) => (
-              <tr key={process.pid} className="hover:bg-gray-700">
-                <td className="px-4 py-2 font-mono">{process.pid}</td>
-                <td className="px-4 py-2 font-mono">{process.user}</td>
-                <td className="px-4 py-2 font-mono">{process.priority}</td>
-                <td className="px-4 py-2 font-mono">
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 bg-gray-700 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-green-500"
-                        style={{ width: `${process.cpu * 20}%` }}
-                      ></div>
-                    </div>
-                    {process.cpu}
-                  </div>
-                </td>
-                <td className="px-4 py-2 font-mono">
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 bg-gray-700 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-500"
-                        style={{ width: `${process.memory * 33}%` }}
-                      ></div>
-                    </div>
-                    {process.memory}
-                  </div>
-                </td>
-                <td className="px-4 py-2 font-mono">{process.time}</td>
-                <td className="px-4 py-2 font-mono text-xs truncate max-w-[200px]">
-                  {process.command}
-                </td>
-              </tr>
+              <ProcessElement key={process.pid} process={process} />
             ))}
           </tbody>
         </table>
@@ -165,3 +135,46 @@ export default function ProcessList() {
     </div>
   )
 }
+
+
+interface ProcessElementProps {
+  process: Process
+}
+
+function ProcessElement({ process }: ProcessElementProps) {
+  return (
+    <tr key={process.pid} className="hover:bg-gray-700">
+    <td className="px-4 py-2 font-mono">{process.pid}</td>
+    <td className="px-4 py-2 font-mono">{process.user}</td>
+    <td className="px-4 py-2 font-mono">{process.priority}</td>
+    <td className="px-4 py-2 font-mono">
+      <div className="flex items-center gap-2">
+        <div className="w-16 bg-gray-700 h-2 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-green-500"
+            style={{ width: `${process.cpu * 20}%` }}
+          ></div>
+        </div>
+        {process.cpu}
+      </div>
+    </td>
+    <td className="px-4 py-2 font-mono">
+      <div className="flex items-center gap-2">
+        <div className="w-16 bg-gray-700 h-2 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-blue-500"
+            style={{ width: `${process.memory * 33}%` }}
+          ></div>
+        </div>
+        {process.memory}
+      </div>
+    </td>
+    <td className="px-4 py-2 font-mono">{process.time}</td>
+    <td className="px-4 py-2 font-mono text-xs truncate max-w-[200px]">
+      {process.name}
+    </td>
+  </tr>
+  )
+}
+
+export default memo(ProcessList)
