@@ -21,7 +21,7 @@ export default function EntryCall({IdFrom, isVisible, setIsVisible}: EntryCallPr
     setIsVisible(false)
     socket?.emit("acceptCall",{targetId:IdFrom})
     setidFrom(Number(IdFrom))
-    setCurrentPage("telefono")
+    setCurrentPage("Telefono")
   },[IdFrom,setCurrentPage,setidFrom,setIsVisible,socket])
 
   const handleReject = useCallback(() => {
