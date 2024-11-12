@@ -7,8 +7,7 @@ const Contacts = [
   {
     id:1,
     name:"Henry lang",
-    lastMessage:`Ella lo que quiere es que la ponga en 4K 
-4K, 4K, 4K, 4K, 4K-K-K, 4K-K-K `,
+    lastMessage:`todo preparado`,
     avatar:"https://github.com/hl-2002.png"
   },
   {
@@ -20,7 +19,7 @@ const Contacts = [
   {
     id:3,
     name:"Mario",
-    lastMessage:"recuerda que lo de SO tiene informe",
+    lastMessage:"recuerda lo de SO",
     avatar
   }
 ]
