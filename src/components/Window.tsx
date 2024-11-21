@@ -247,3 +247,24 @@ function Windows({children,appName}:WindowsProps) {
 
 
 export default memo(Windows)
+
+
+export function Browser(){
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+
+  return <Windows appName="Browser">
+    <iframe 
+    
+    onLoad={()=>{
+        iframeRef.current?.style.setProperty("position","relative")
+        iframeRef.current?.style.setProperty("left","0")
+    }}
+    ref={iframeRef}
+    src="https://www.google.com/webhp?igu=1" className="w-full h-full" />
+  </Windows>
+
+
+
+
+}
