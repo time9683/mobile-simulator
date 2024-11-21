@@ -9,7 +9,6 @@ import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
 import Whatsapp from "@components/Whassapp"
 import NavigationView from "./NavigationView"
-import Windows from "./Window"
 
 
 const getSecondPage = (page: string): JSX.Element | null => {
@@ -231,16 +230,7 @@ function Block() {
 
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2 relative">
        
-        <Windows
-            appName="Chrome"
-        >
-
-        <iframe
-        title="Browser"
-        className="w-full h-full"
-     src="https://www.google.com/webhp?igu=1"
-        ></iframe>
-        </Windows>
+        <Browser url="https://www.google.com/webhp?igu=1"/>
        
         {
             apps.map((app, index) => {

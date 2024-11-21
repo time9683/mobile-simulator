@@ -221,7 +221,6 @@ function Windows({children,appName}:WindowsProps) {
       w-full
       h-full
       relative
-      left-0
     ">
 
       
@@ -247,3 +246,22 @@ function Windows({children,appName}:WindowsProps) {
 
 
 export default memo(Windows)
+
+
+
+
+export function Browser({url}: {url:string}) {
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+
+  return <Windows appName="Browser">
+    <iframe
+    onLoad={()=>{
+      iframeRef.current?.style.setProperty("position","relative")
+      iframeRef.current?.style.setProperty("left","0")
+    }}
+    ref={iframeRef} src={url} className="w-full h-full" />
+  </Windows>
+  
+
+}
