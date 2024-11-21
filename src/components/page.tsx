@@ -228,10 +228,14 @@ function Block() {
     }, [ElementDrag])
 
 
+<<<<<<< HEAD
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2 relative">
        
         <Browser url="https://www.google.com/webhp?igu=1"/>
        
+=======
+    return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2">
+>>>>>>> parent of 98a2316 (Agregar componente Windows para gestionar ventanas con funcionalidad de redimensionamiento y minimización)
         {
             apps.map((app, index) => {
                 return <MemoIconApp
