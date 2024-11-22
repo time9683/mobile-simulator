@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react"
 import WebFileSys,{FileSystemEntry} from "@services/files"
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon, Search } from "lucide-react"
 import folder from "@/assets/folder.png"
 
  function FileExplorer() {
@@ -65,7 +65,7 @@ import folder from "@/assets/folder.png"
 
 
   return <div className="w-full h-full bg-neutral-900 text-white relative z-10" ref={refelement}>
-      <div className="bg-neutral-950 p-1 flex items-center">
+      <div className="bg-neutral-950 p-1 flex items-center gap-2">
           <button 
           
           disabled={currentPath == "/"}
@@ -85,6 +85,11 @@ import folder from "@/assets/folder.png"
 
 
           <input type="text" className="bg-neutral-950 border-neutral-700 border px-2" value={currentPath} disabled />
+          <label className="relative">
+          <input type="text" className="bg-neutral-950 border-neutral-700 border px-2"  placeholder="search"  />
+          <Search size={18} className="absolute right-1 top-1 text-neutral-600" />
+          </label>
+
 
       </div>
 
