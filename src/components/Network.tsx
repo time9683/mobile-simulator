@@ -54,7 +54,6 @@ export default function Network() {
     useEffect(() => {
         const connection = (navigator as NavigatorNetworkInformation).connection
         const updateNetworkStatus = () => {
-            console.log("Network status updated")
             if (navigator.onLine) {
                 setNetworkStatus('connected')
             } else {

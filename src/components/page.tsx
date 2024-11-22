@@ -1,15 +1,18 @@
 import useMovilStore from "@stores/movil.ts"
-import { useEffect, useRef, useState, CSSProperties, useMemo, memo, useCallback } from "react"
+import { useEffect, useRef, useState, CSSProperties, memo, useCallback } from "react"
 import { getRowAndColumn } from "@/utils"
 import Galery from "@components/Galery"
 import ProcessList from "@components/ProcessList"
 import Camara from "@components/camara"
-import { motion, AnimatePresence } from "framer-motion"
+import {  AnimatePresence } from "framer-motion"
 import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
 import Whatsapp from "@components/Whassapp"
 import NavigationView from "./NavigationView"
 import  Windows from "./Window"
+import FileExplorer from "./FileExplorer"
+
+
 
 
 function Iframe({ url }: { url: string }) {
@@ -35,6 +38,15 @@ function Iframe({ url }: { url: string }) {
 
 
 
+
+
+
+
+
+
+
+
+
 const getSecondPage = (page: string): JSX.Element | null => {
     const PageComponents: { [key: string]: JSX.Element } = {
         "Navigation": <NavigationView />,
@@ -48,15 +60,17 @@ const getSecondPage = (page: string): JSX.Element | null => {
         "Camara": <Camara />,
         "Telefono": <Phone />,
         "Recorder": <Recorder />,
-        "Whatsapp": <Whatsapp />
+        "Whatsapp": <Whatsapp />,
+        "FileExplorer": <FileExplorer />
+
     }
     return PageComponents[page] || null
 }
 
 
 
-const width = 90
-const height = 114
+// const width = 90
+// const height = 114
 const MemoHome = memo(Home)
 const MemoBlock = memo(Block)
 const MemoIconApp = memo(IconApp)
@@ -197,6 +211,11 @@ const APPs: App[] = [
     {
         name: "Recorder",
         urlIcon: "https://cdn-icons-png.flaticon.com/512/3817/3817556.png"
+    },
+
+    {
+        name: "FileExplorer",
+        urlIcon: "https://cdn-icons-png.flaticon.com/512/732/732223.png"
     }
 ]
 

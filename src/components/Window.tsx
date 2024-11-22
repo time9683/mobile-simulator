@@ -217,7 +217,6 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
   min-w-[300px] min-h-[300px] 
   ${maximized ? "z-20" : "z-10"}
    absolute  flex flex-col rounded
-   border-4 border-neutral-950
    `}>
     {/* toobar */}
 
@@ -271,8 +270,6 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       bg-white
       relative
       h-full
-      border-4
-      border-neutral-950
     ">
 
       
