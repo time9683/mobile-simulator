@@ -54,9 +54,9 @@ const useMovilStore = create<MovilState>((set) => ({
 	initTime : Date.now(),
 	process: [],
 	addProcess: (process: MinimalProcess) => set((state) => {
-		if (state.process.some((p) => p.name === process.name)) {
-			return state;
-		}
+		// if (state.process.some((p) => p.name === process.name)) {
+		// 	return state;
+		// }
 
 		// add the rest of the elements to the process
 		const newProcess: Process = {
@@ -71,7 +71,7 @@ const useMovilStore = create<MovilState>((set) => ({
 		
 		return { process: [...state.process, newProcess] };
 	}),
-	removeProcess: (process: Process) => set((state) => ({ process: state.process.filter((p) => p.name !== process.name) })),
+	removeProcess: (process: Process) => set((state) => ({ process: state.process.filter((p) => p.pid !== process.pid) })),
 	UpdateAllProcesses: (process: Process[]) => set(() => ({ process })),
 	// TODO: power must be off by default in production
 	power: true,

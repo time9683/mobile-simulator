@@ -64,24 +64,24 @@ const MemoIconApp = memo(IconApp)
 
 
 export default function Page() {
-    const currentPage = useMovilStore((state) => state.currentPage)
+    // const currentPage = useMovilStore((state) => state.currentPage)
     const OpenAplications = useMovilStore((state)=> state.process)
     const changeMinimized = useMovilStore((state) => state.maximizeProcess)
     const removeProcess = useMovilStore((state) => state.removeProcess)
-    const IconCoordinates = useMovilStore((state) => state.IconAppCoordintes)
-    const [isVisible, setIsVisible] = useState(false)
+    // const IconCoordinates = useMovilStore((state) => state.IconAppCoordintes)
+    // const [isVisible, setIsVisible] = useState(false)
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (currentPage !== "home") {
-            setIsVisible(true)
-        } else {
-            setIsVisible(false)
-        }
+    //     if (currentPage !== "home") {
+    //         setIsVisible(true)
+    //     } else {
+    //         setIsVisible(false)
+    //     }
 
 
-    }, [currentPage])
+    // }, [currentPage])
 
 
 
@@ -109,7 +109,7 @@ export default function Page() {
             {
                 OpenAplications.map((app) => {
                     return <Windows 
-                    key={app.name}
+                    key={app.pid}
                     TogleMinimized={()=>changeMinimized(app)}
                     minimized={!app.maximized}
                     remove={()=>removeProcess(app)}

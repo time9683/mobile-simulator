@@ -10,7 +10,7 @@ function AppTabs() {
             {
                 process.map((p) => {
                     return (
-                        <div key={p.name} onClick={() => maximizedProcess(p)}
+                        <div key={p.pid} onClick={() => maximizedProcess(p)}
                             className="flex cursor-pointer m-1" >
                             <img src={p.urlIcon} alt={p.name} className="w-8"/>
                         </div>

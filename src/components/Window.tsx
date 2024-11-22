@@ -83,7 +83,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
 
       // remove windows transtion
-      refWindow.current?.style.setProperty("transition","none")
+      // refWindow.current?.style.setProperty("transition","none")
 
       const handleMouseMove = (e: MouseEvent) => {
         const deltaX = e.clientX - initX;
@@ -100,7 +100,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseup", handleMouseUp);
         // add windows transtion
-        refWindow.current?.style.setProperty("transition","width 0.3s, height 0.3s, top 0.3s, left 0.3s")
+        // refWindow.current?.style.setProperty("transition","width 0.3s, height 0.3s, top 0.3s, left 0.3s")
       };
 
       window.addEventListener("mousemove", handleMouseMove);
@@ -208,14 +208,17 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
 
 
-    style={{
-      width:`${size.width}px`,
-      height:`${size.height}px`,
-    }}
+    // style={{
+    //   width:`${size.width}px`,
+    //   height:`${size.height}px`,
+    // }}
   className={`
   select-none
-  min-w-[300px] min-h-[300px] ${maximized ? "z-20" : "z-10"}
-   absolute  flex flex-col rounded`}>
+  min-w-[300px] min-h-[300px] 
+  ${maximized ? "z-20" : "z-10"}
+   absolute  flex flex-col rounded
+   border-4 border-neutral-950
+   `}>
     {/* toobar */}
 
     <section
@@ -268,6 +271,8 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       bg-white
       relative
       h-full
+      border-4
+      border-neutral-950
     ">
 
       
