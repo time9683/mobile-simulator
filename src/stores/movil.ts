@@ -7,6 +7,7 @@ interface MinimalProcess {
 	name: string
 	urlIcon: string
 	component: React.FC
+	maximized: boolean
 }
 
 
@@ -36,6 +37,7 @@ interface MovilState {
 	process: Process[],
 	addProcess: (process: MinimalProcess) => void,
 	removeProcess: (process: Process) => void,
+	maximizeProcess: (process: Process) => void,
 	UpdateAllProcesses: (process: Process[]) => void,
 	changePage: (newPage: string) => void,
 	setInitTime: (time: number) => void,
@@ -80,6 +82,14 @@ const useMovilStore = create<MovilState>((set) => ({
 	IconAppCoordintes:null,
 	socket:null,
 	EntryCallId:null,
+	maximizeProcess: (process: Process) => set((state) => ({
+		process: state.process.map((p) => {
+			if (p.name === process.name) {
+				return { ...p, maximized: !p.maximized };
+			}
+			return p;
+		}),
+	})),
 	setIconAppCoordinates:(x:number,y:number) => set(()=> ({IconAppCoordintes:{x,y}})),
 	setNetworkStatus: (status: NetworkStatus) => set(() => ({ networkStatus: status })),
 	changePage: (newPage: string) => set(() => ({ currentPage: newPage })),

@@ -66,7 +66,7 @@ function Camara() {
 
 
 
-    return <main className="grid grid-rows-[auto_1fr_auto] w-full max-h-screen h-full bg-black place-content-center">
+    return <main className="grid grid-rows-[auto_1fr_auto] w-full max-h-screen h-full place-content-center bg-black">
 
         <div className="bg-black w-full h-20">
 

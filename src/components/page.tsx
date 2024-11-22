@@ -9,17 +9,40 @@ import Phone from "@components/Phone"
 import Recorder from "@components/Recorder"
 import Whatsapp from "@components/Whassapp"
 import NavigationView from "./NavigationView"
-import  { Browser } from "./Window"
+import  Windows from "./Window"
+
+
+function Iframe({ url }: { url: string }) {
+    const refElement = useRef<HTMLIFrameElement>(null)
+
+    
+
+
+    return <iframe 
+    
+    onLoad={()=>{
+
+        refElement.current?.style.setProperty("position","relative")
+        refElement.current?.style.setProperty("left","0 ")
+
+
+    }}
+
+    ref={refElement}
+    src={url} className="w-full h-full" />
+}
+
+
 
 
 const getSecondPage = (page: string): JSX.Element | null => {
     const PageComponents: { [key: string]: JSX.Element } = {
         "Navigation": <NavigationView />,
-        "Chrome": <iframe src="https://www.google.com/webhp?igu=1" className="w-full h-full" />,
-        "Netflix": <iframe src="https://fmovies2u.in/movies/" className="w-full h-full" />,
-        "Spotify": <iframe src="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" className="w-full h-full" />,
-        "Amazon": <iframe src="https://www.mercadolibre.com.ve/" className="w-full h-full" />,
-        "Youtube": <iframe src="https://www.dailymotion.com/co" className="w-full h-full" />,
+        "Chrome": <Iframe url="https://www.google.com/webhp?igu=1" />,
+        "Netflix": <Iframe url="https://fmovies2u.in/movies/" />,
+        "Spotify": <Iframe url="https://honey-tyagi-spotify-clone.vercel.app/login/login.html" />,
+        "Amazon": <Iframe url="https://www.mercadolibre.com.ve/" />,
+        "Youtube": <Iframe url="https://www.dailymotion.com/co" />,
         "Galeria": <Galery />,
         "Procesos": <ProcessList />,
         "Camara": <Camara />,
@@ -42,6 +65,9 @@ const MemoIconApp = memo(IconApp)
 
 export default function Page() {
     const currentPage = useMovilStore((state) => state.currentPage)
+    const OpenAplications = useMovilStore((state)=> state.process)
+    const changeMinimized = useMovilStore((state) => state.maximizeProcess)
+    const removeProcess = useMovilStore((state) => state.removeProcess)
     const IconCoordinates = useMovilStore((state) => state.IconAppCoordintes)
     const [isVisible, setIsVisible] = useState(false)
 
@@ -58,15 +84,14 @@ export default function Page() {
     }, [currentPage])
 
 
-    const secondPage = useMemo(() => getSecondPage(currentPage), [currentPage])
 
-    const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
-    const y = IconCoordinates && typeof IconCoordinates.y === 'number' ? IconCoordinates.y : 0;
+    // const x = IconCoordinates && typeof IconCoordinates.x === 'number' ? IconCoordinates.x : 0;
+    // const y = IconCoordinates && typeof IconCoordinates.y === 'number' ? IconCoordinates.y : 0;
 
 
     return (
         <div className="relative h-full">
-            <AnimatePresence>
+            {/* <AnimatePresence>
                 {isVisible && (
                     <motion.div
                         key="page"
@@ -79,7 +104,26 @@ export default function Page() {
                         {secondPage}
                     </motion.div>
                 )}
+            </AnimatePresence> */}
+            <AnimatePresence>
+            {
+                OpenAplications.map((app) => {
+                    return <Windows 
+                    key={app.name}
+                    TogleMinimized={()=>changeMinimized(app)}
+                    minimized={!app.maximized}
+                    remove={()=>removeProcess(app)}
+                    appName={app.name} >{
+                        getSecondPage(app.name)
+                    }</Windows>
+                    
+                }
+            
+
+                )
+            }
             </AnimatePresence>
+
             <MemoHome />
         </div>
     );
@@ -230,10 +274,6 @@ function Block() {
 
 
     return <section className="grid grid-cols-[repeat(auto-fill,90px)] grid-rows-[repeat(auto-fill,90px)]  w-full gap-2 relative">
-       
-    <Browser/>
-      
-       
         {
             apps.map((app, index) => {
                 return <MemoIconApp
@@ -282,7 +322,7 @@ function IconApp(props: IconAppProps) {
             const { x, y } = ref.current.getBoundingClientRect();
             setIconPosition(x, y)
         }
-        addProcess({ name: props.name, urlIcon: props.urlIcon, component: () => null })
+        addProcess({ name: props.name, urlIcon: props.urlIcon, component: () => null, maximized: true })
         setPage(props.name)
     }, [addProcess, props.name, props.urlIcon, setIconPosition, setPage])
 
