@@ -24,6 +24,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
   const dragsControls = useDragControls()
   const refResize = useRef<HTMLDivElement>(null)
+  const refResizeRight = useRef<HTMLDivElement>(null)
 
 
   useEffect(()=>{
@@ -63,32 +64,34 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
   useEffect(()=>{
 
-    function mouseDownResize(e: MouseEvent) {
+    function mouseDownResize(e: MouseEvent, side: string) {
       const initX = e.clientX;
       const initY = e.clientY;
       const initWidth = size.width;
       const initHeight = size.height;
 
-
-      // remove windows transtion
-      // refWindow.current?.style.setProperty("transition","none")
-
       const handleMouseMove = (e: MouseEvent) => {
-        const deltaX = e.clientX - initX;
-        const deltaY = e.clientY - initY;
+      // const deltaX = e.clientX - initX;
+      // const deltaY = e.clientY - initY;
 
-        console.log(deltaX,deltaY);
-        setSize({
-          width: initWidth + deltaX - 1,
-          height: initHeight + deltaY -2,
-        });
+      if (side === "bottom") {
+        setSize((prevSize) => ({
+        width: prevSize.width,
+        // calculate the height
+        height: initHeight + e.clientY - initY - 1,
+        }));
+      } else if (side === "right") {
+        setSize((prevSize) => ({
+        width: initWidth + e.clientX - initX - 1,
+        height: prevSize.height,
+        }));
+
+      }
       };
 
       const handleMouseUp = () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
-        // add windows transtion
-        // refWindow.current?.style.setProperty("transition","width 0.3s, height 0.3s, top 0.3s, left 0.3s")
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
       };
 
       window.addEventListener("mousemove", handleMouseMove);
@@ -96,15 +99,18 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
     }
 
     const resizeElement = refResize.current;
-    if (resizeElement) {
-      resizeElement.addEventListener("mousedown", mouseDownResize);
+    const resizeElementRight = refResizeRight.current;
+    if (resizeElement && resizeElementRight) {
+      resizeElement.addEventListener("mousedown", (e) => mouseDownResize(e, "bottom"));
+      resizeElementRight.addEventListener("mousedown", (e) => mouseDownResize(e, "right"));
     }
 
    
 
     return ()=>{
-      if (resizeElement) {
-        resizeElement.removeEventListener("mousedown", mouseDownResize);
+      if (resizeElement && resizeElementRight) {
+        resizeElement.removeEventListener("mousedown",(e) => mouseDownResize(e, "bottom"));
+        resizeElementRight.removeEventListener("mousedown", (e) => mouseDownResize(e, "right"));
       }
     }
 
@@ -190,7 +196,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       {
         type: "spring",
         damping: 30,
-        stiffness: 300
+        stiffness: 300,
       }
     }
 
@@ -265,16 +271,22 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
 
 
+    <div
+      ref={refResize}
+    className="absolute bottom-0 w-full h-3
+    cursor-s-resize
+    "></div>
+
+<div
+      ref={refResizeRight}
+    className="absolute right-0 top-0 h-full w-3
+    cursor-e-resize
+    "></div>
     </div>
 
 
-
     </section>
-    <div
-      ref={refResize}
-    className="absolute bottom-0 w-full h-2
-    cursor-s-resize
-    "></div>
+  
   </motion.div>
 
 
