@@ -129,8 +129,9 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
     }
 
     const parentSize = refWindow?.current?.parentElement?.parentElement?.getBoundingClientRect();
+  
     if (!parentSize) return;
-
+    console.log(parentSize)
     const {x,y} = refWindow?.current?.getBoundingClientRect() || {x:0,y:0}
 
 
@@ -148,7 +149,8 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
     setSize({
       width: parentSize.width,
-      height: parentSize.height,
+      // the 40 is the height of the toolbar
+      height: parentSize.height - 40,
     });
 
     setMaximized(true);
