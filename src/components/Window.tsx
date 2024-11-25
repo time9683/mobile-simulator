@@ -23,23 +23,21 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
   const prevPosition = useRef({x:0,y:0})
 
   const dragsControls = useDragControls()
-
-
   const refResize = useRef<HTMLDivElement>(null)
+
 
   useEffect(()=>{
     if(minimized){
       savePrevState()
       setSize({width:0,height:0})
       setPosition({x:0,y:1000})
+      setMaximized(false)
     }else{
       setSize(prevSize.current)
       setPosition(prevPosition.current)
-
+    }
   }
-  }
-  ,[minimized
-  ])
+  ,[minimized])
   
 
 
@@ -59,21 +57,11 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
   }
 
 
-  useEffect(()=>{
-    console.log(position);
-  },[position])
 
 
 
 
   useEffect(()=>{
-
-
-
-
-
-
-
 
     function mouseDownResize(e: MouseEvent) {
       const initX = e.clientX;
