@@ -8,8 +8,9 @@ import { formatUptime } from "@/utils"
 
  function ProcessList() {
   const processes = useMovilStore((state) => state.process)
-  const setProcesses = useMovilStore((state) => state.UpdateAllProcesses)
 
+
+  const [cloneProcesses, setProcesses] = useState<Process[]>([])
   const initTime = useMovilStore((state)=> state.initTime)
 
   const [systemInfo, setSystemInfo] = useState({
@@ -21,8 +22,18 @@ import { formatUptime } from "@/utils"
   })
 
   useEffect(() => {
+
+    setProcesses(processes)
+    console.log("una sola vez")
+
+   
+  }, [processes])
+
+
+  useEffect(()=>{
+
     const interval = setInterval(() => {
-      const newProcesses = processes.map(process => ({
+      const newProcesses = cloneProcesses.map(process => ({
         ...process,
         cpu: Number((Math.random() * 5).toFixed(1)),
         memory: process.name.toLowerCase().includes("chrome") ? Number((Math.random() * 20).toFixed(1)) : Number((Math.random() * 3).toFixed(1))
@@ -44,8 +55,9 @@ import { formatUptime } from "@/utils"
     }, 2000)
 
     return () => clearInterval(interval)
-  }, [])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[cloneProcesses])
 
 
 
@@ -53,7 +65,7 @@ import { formatUptime } from "@/utils"
 
 
   return (
-    <div className="w-full  bg-gray-800 text-gray-200 shadow-lg overflow-hidden h-screen">
+    <div className="w-full  bg-gray-800 text-gray-200 shadow-lg overflow-hidden h-full">
       <div className="p-6 space-y-6">
         <h2 className="text-2xl font-mono font-bold">System Monitor</h2>
         <div className="grid gap-6 md:grid-cols-2">
@@ -124,9 +136,10 @@ import { formatUptime } from "@/utils"
             time: "0:00.00",
             name: "init",
             urlIcon: "",
+            maximized: false,
             component: () => { return <></> }
           }} />
-            {processes.map((process) => (
+            {cloneProcesses.map((process) => (
               <ProcessElement key={process.pid} process={process} />
             ))}
           </tbody>

@@ -192,7 +192,7 @@ return (<section className={`w-full h-full relative bg-[#111] overflow-x-auto ${
 
   <button 
   onClick={handleToggleRecording}
-  className="rounded-full bg-red-500 w-12 h-12 flex justify-center items-center active:scale-75 transition-transform fixed bottom-20 left-0 right-0 m-auto">
+  className="rounded-full bg-red-500 w-12 h-12 flex justify-center items-center active:scale-75 transition-transform absolute bottom-20 left-0 right-0 m-auto">
    { 
     !isRecording ?
     <div className=" rounded-full bg-white w-4 h-4 "></div>:
@@ -286,7 +286,7 @@ function  RecorderItem({id,seleted,setIem,isPlaying,setPause,audio,duration,hand
 
 
   return (
-    <li className="flex  flex-col gap-4  text-white p-6 bg-neutral-800 rounded-xl"
+    <li className="flex  flex-col gap-4  text-white p-6 bg-neutral-800 rounded-xl relative"
     onClick={seletedA}
     >
 

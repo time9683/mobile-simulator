@@ -79,7 +79,7 @@ function Galery() {
 
 
     return (
-      <main className="w-full p-2 h-full overflow-auto  bg-white" onDrop={onDrop} 
+      <main className="w-full  h-full overflow-auto  bg-white relative" onDrop={onDrop} 
       onDragOver={onDragOver}
       >
         { 
@@ -89,7 +89,7 @@ function Galery() {
         }
 
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,261.578px))] gap-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,261.578px))] gap-2 p-4">
           {
             images.map((image) => (
               <MemoImageItem
@@ -106,7 +106,7 @@ function Galery() {
         </div>
         {
           selectedImages.size > 0 && (
-            <div className="fixed bottom-8 left-0 right-0 bg-gray-900 p-2 flex justify-between items-center">
+            <div className="sticky bottom-0 left-0 right-0 bg-gray-900 p-2 flex justify-between items-center">
               <p className="text-white">{selectedImages.size} selected</p>
               <button
                 onClick={() => {
@@ -143,11 +143,11 @@ interface ImageViewerProps {
 
 function ImageViewer({src, setCurrentImage, currentImage}: ImageViewerProps){
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed left-0 top-10  z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
     <img
     src={src}
     alt={`Photo ${currentImage && currentImage + 1}`} 
-    className="object-cover aspect-[9/16] "
+    className="object-cover"
     onClick={() => setCurrentImage(null)}
  />
  </div>
