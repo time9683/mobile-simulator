@@ -302,11 +302,17 @@ class WebFileSys implements FileSystem{
               createdAt: new Date(),
               updatedAt: new Date()
             }
-          }
-        
-        
-        
-        
+          },
+          {
+            name: "Sheets",
+            isDirectory: false,
+            content: "https://cdn.icon-icons.com/icons2/3053/PNG/512/google_sheets_alt_macos_bigsur_icon_190110.png",
+            contentType: "app",
+            metaData: {
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }
+          },
         ]
         },
         {
