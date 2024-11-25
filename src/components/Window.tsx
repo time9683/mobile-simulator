@@ -25,7 +25,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
   const dragsControls = useDragControls()
   const refResize = useRef<HTMLDivElement>(null)
   const refResizeRight = useRef<HTMLDivElement>(null)
-
+  const [isResize,setIsResize] = useState(false)
 
   useEffect(()=>{
     if(minimized){
@@ -70,6 +70,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       const initWidth = size.width;
       const initHeight = size.height;
 
+      setIsResize(true)
       const handleMouseMove = (e: MouseEvent) => {
       // const deltaX = e.clientX - initX;
       // const deltaY = e.clientY - initY;
@@ -90,6 +91,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       };
 
       const handleMouseUp = () => {
+      setIsResize(false)
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
       };
@@ -182,7 +184,11 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
 
   const trans =  maximized ? {transform:`translate(${transformX}px,${transformY}px)`,zIndex:1000} : {transform:"none"}
-
+  const transition =   isResize ? {type: "spring", damping: 30, stiffness: 300,duration:0} : {
+    type: "spring",
+    damping: 30,
+    stiffness: 300,
+  }
 
 
   return <motion.div
@@ -193,11 +199,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
     dragControls={dragsControls}
     dragListener={false}
     transition={
-      {
-        type: "spring",
-        damping: 30,
-        stiffness: 300,
-      }
+      transition
     }
 
 
