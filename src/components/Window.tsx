@@ -131,7 +131,6 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
     const parentSize = refWindow?.current?.parentElement?.parentElement?.getBoundingClientRect();
   
     if (!parentSize) return;
-    console.log(parentSize)
     const {x,y} = refWindow?.current?.getBoundingClientRect() || {x:0,y:0}
 
 
