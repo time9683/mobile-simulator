@@ -163,7 +163,6 @@ export default function Vscode({file,workFolder}:VscodeProps){
 
 
 
-
   return <div ref={refElement} className="h-full w-full relative">
   { finder.visible &&  (<div 
   ref={refFinder}
@@ -204,6 +203,8 @@ export default function Vscode({file,workFolder}:VscodeProps){
     </div>)
 }
     
+ { currentFile ? ( 
+  <>
   <Editor  height="100%" language={language}
   value={content} onChange={(value)=>{
     
@@ -213,5 +214,19 @@ export default function Vscode({file,workFolder}:VscodeProps){
   <span className="absolute bottom-1 left-1 text-white text-sm p-1 bg-blue-500"> {currentFile.split("/").at(-1)} 
   {isDirty && <span className="text-sm ml-2">* </span>}
   </span>
+  </>
+ )
+  :(
+    // say to user press ctrl + p to open the finder
+    <div className="w-full h-full flex justify-center items-center bg-neutral-900">
+      <span className="text-white text-lg flex gap-2">Press 
+        <kbd className="bg-neutral-700 p-1 rounded ">Ctrl</kbd> 
+        + <kbd className="bg-neutral-700 p-1 rounded ">p</kbd>to open the finder</span>
+        
+      </div>
+  
+
+  )}
+  
   </div> 
 }

@@ -497,7 +497,7 @@ function IconApp(props: IconAppProps) {
         if(defaultOpen == "html"){
             const vscode = WebFileSys.getFromPath("/Desktop/vscode")
             if(vscode.ok && !vscode.value.isDirectory){
-                addProcess({ name: "vscode", urlIcon: vscode.value.content as string, component: () => null, maximized: true,params:`/Desktop/${props.node.name}` })
+                addProcess({ name: "vscode", urlIcon: vscode.value.content as string, component: () => null, maximized: true,params:{file:`/Desktop/${props.node.name}`} })
                 return
             }
         }

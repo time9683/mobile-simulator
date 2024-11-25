@@ -112,12 +112,14 @@ interface FileExplorerProps {
 
       getFiles()
 
-      refelement.current?.addEventListener("contextmenu",(event)=>{
+      const currentRef = refelement.current;
+
+      currentRef?.addEventListener("contextmenu",(event)=>{
           event.preventDefault()
             setContextMenu(event.clientX,event.clientY,true,"file",selectedFiles,actionHandler)
       })
 
-      refelement.current?.addEventListener("click",()=>{
+      currentRef?.addEventListener("click",()=>{
           setTimeout(()=>{
                 setContextMenu(0,0,false,"",undefined,()=>{})
                 setSelectedFiles(undefined)
@@ -125,8 +127,8 @@ interface FileExplorerProps {
       })
 
       return ()=>{
-          refelement.current?.removeEventListener("contextmenu",()=>{})
-          refelement.current?.removeEventListener("click",()=>{})
+          currentRef?.removeEventListener("contextmenu",()=>{})
+          currentRef?.removeEventListener("click",()=>{})
 
           WebFileSys.desuscribe(getFiles)
       }
@@ -194,7 +196,7 @@ interface FileExplorerProps {
                     const extesion = file.name.includes(".") ? file.name.split(".").pop() : "txt"
 
                     if(extesion == "html"){
-                        createProcess({name:"vscode",component:()=><></>,maximized:true,urlIcon:"https://cdn-icons-png.flaticon.com/512/732/732200.png",params:`${currentPath}${file.name}`})
+                        createProcess({name:"vscode",component:()=><></>,maximized:true,urlIcon:"https://cdn-icons-png.flaticon.com/512/732/732200.png",params:{file:`${currentPath}${file.name}`}})
                         return
                     }
 
