@@ -11,7 +11,7 @@ function AppTabs() {
                 process.map((p) => {
                     return (
                         <div key={p.name} onClick={() => changePage(p.name)}
-                            className="flex cursor-pointer m-1" >
+                            className="flex cursor-pointer m-1 " >
                             <img src={p.urlIcon} alt={p.name} className="w-8"/>
                         </div>
                     )
