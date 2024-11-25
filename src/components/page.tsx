@@ -78,7 +78,8 @@ const getSecondPage = (page: string,params?:unknown): JSX.Element | null => {
         // this show a string html in a iframe processes
         "Viewer" :  <iframe srcDoc={params as string ?? ""} className="w-full h-full" />,
         "vscode":  <Vscode file={(params as {file?:string})?.file}  workFolder={(params as {workfolder?:string})?.workfolder} 
-            />
+            />,
+        "Sheets": <Iframe url="https://ethercalc.net/_start" />,
 
 
     }
