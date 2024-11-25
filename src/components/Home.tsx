@@ -2,10 +2,17 @@ import homeIcon from '../assets/dragon.png';
 import useMovilStore from '@stores/movil';
 
 export default function Home() {
-    const changePage = useMovilStore((state) => state.changePage);
+    const process = useMovilStore((state) => state.process);
+    const maximizeProcess = useMovilStore((state) => state.maximizeProcess);
     
     return (
-        <button className='m-1' onClick={() => {changePage('home')}}>
+        // TODO: It ain't necessary to change the page to home if
+        <button className='m-1' onClick={() => {
+            process.forEach((p) => {
+                maximizeProcess(p)
+            })
+            console.log(process)
+        }}>
             <img src={homeIcon} alt="Home" width='30' />
         </button>
     )
