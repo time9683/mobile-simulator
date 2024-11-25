@@ -68,7 +68,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
       const initX = e.clientX;
       const initY = e.clientY;
       const initWidth = size.width;
-      const initHeight = size.height;
+      const initHeight = size.height
 
       setIsResize(true)
       const handleMouseMove = (e: MouseEvent) => {
@@ -118,8 +118,7 @@ function Windows({children,appName,minimized,TogleMinimized,remove}:WindowsProps
 
 
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[size.width,size.height])
 
   const maxSize = () => {
     if (maximized) {
